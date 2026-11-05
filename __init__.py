@@ -320,11 +320,20 @@ class _Adapter:
 
     def _run(self, operation, plan_id=None) -> str:
         from .caprover_operator.guidance import explain
+        from .caprover_operator.presentation import present
 
         try:
             with _make_runtime(self._settings()) as runtime:
-                return _json(explain(operation(runtime), plan_id, configured_app=runtime.settings.app,
-                                     configured_target=runtime.binding.target))
+                result = explain(operation(runtime), plan_id, configured_app=runtime.settings.app,
+                                 configured_target=runtime.binding.target)
+                try:
+                    result = present(result, data_dir=Path(runtime.binding.scope),
+                                     app=runtime.settings.app, target=runtime.binding.target)
+                except Exception:
+                    # A display failure must never obscure the durable outcome
+                    # of a possible deployment or invite repeating apply.
+                    pass
+                return _json(result)
         except _Refused as exc:
             return _error(exc.code, plan_id)
         except Exception as exc:
@@ -503,6 +512,8 @@ def register(ctx):
         ("caprover_status", "Read one saved plan/receipt or list recent ones. Historical evidence includes its observation time.", {"plan_id": {"type": "string"}}, [], adapter.status),
     )
     for name, description, properties, required, handler in tools:
+        if name != "caprover_doctor":
+            description += " Results may include historical operation cards: display each available presentation.cards[].preview directive unchanged on its own line. Cards cannot execute or approve; never repeat an operation to repair a preview. JSON remains the fallback."
         ctx.register_tool(name=name, toolset="caprover_operator", schema=_schema(name, description, properties, required), handler=handler)
     ctx.register_hook("pre_tool_call", adapter.before_tool)
     ctx.register_hook("post_approval_response", adapter.after_approval)

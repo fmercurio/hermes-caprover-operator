@@ -2,7 +2,9 @@
 
 Small teams running open-source services on their own infrastructure need manageable deployments, so server administration does not become a second job. CapRover Operator brings one focused workflow into Hermes: deploy an immutable image to one owner-configured CapRover app through a saved plan and native human approval. If CapRover accepts the request just before the connection disappears, the plugin preserves uncertainty across restarts, blocks another deployment attempt for the same plan and uses read-only reconciliation to establish what was observed.
 
-This is a development release; catalog acceptance is a separate step. A [recorded real CLI validation](docs/real-cli-validation.md) used Hermes' native CLI, a live model and CapRover 1.16.0: two CLI processes, one deployment POST, a lost acknowledgement, replay refusal and read-only reconciliation to verified task/HTTP evidence. User-authorized lab automation operated the actual native approval UI; this run used no synthetic approval callback or manual human keypress. Its [sanitized trace](evidence/real-hermes-cli-trace.json) records source hashes matching this 0.2.0 implementation.
+This is a development release; catalog acceptance is a separate step. The [recorded 0.3.0 validation](docs/real-cli-validation-v4.md) used native Hermes CLI and Desktop, a live model and CapRover 1.16.0 to update CyberChef 11.4.0 → 11.5.0: inline operation cards, a lost acknowledgement, real process restart, replay refusal and read-only reconciliation to verified task/HTTP evidence, with one plugin deployment POST. User-authorized lab automation operated native approval; the exact responding UI was not attributed, and no manual human keypress or synthetic approval callback is claimed. All 12 recorded source hashes match the 0.3.0 implementation.
+
+The earlier [0.2.0 CLI validation](docs/real-cli-validation.md) and its [trace](evidence/real-hermes-cli-trace.json) remain unchanged and separately attributed. The [public 0.3.0 trace](evidence/real-hermes-cli-trace-v4.json) documents its descriptive annotations and presentation-path sanitization while preserving the recorded operation facts and deployment counters.
 
 The [protocol demos](#local-development-and-protocol-demo) use a synthetic API. The earlier [real CapRover dispatcher validation](docs/real-lab-validation.md) used a simulated host approval callback and separately captured metadata/HTTP appearing before runtime convergence. These evidence types are labeled individually.
 
@@ -88,6 +90,14 @@ Once the check identifies a usable app, provide an image reference with its actu
 > Plan this immutable image for my configured app. Show me the target, current state, requested image, expiry and plan ID before applying it.
 
 Review the saved intent and the native approval message when you choose to apply. If an acknowledgement is lost, use `caprover_reconcile` with the same plan ID. Inspect `caprover_status` for the local receipt when resuming a conversation. Suggested `guidance.next_step` entries describe an explicit next call; `automatic: false` means the plugin does not execute it on your behalf. Preserve the ledger while an outcome is uncertain.
+
+## Operation cards
+
+Workflow tools also return a read-only operation card: app and configured destination, previous and requested images, saved state, dated metadata/runtime/HTTP evidence and the next suggested tool. A planned operation remains a proposal; uncertain and metadata-only results stay visibly unverified. The card cannot approve or execute a deployment.
+
+The plugin writes a private, immutable HTML snapshot and returns its exact `presentation.cards[].preview` directive. Hermes Desktop's public `::preview{file="…"}` surface can display it inline when the assistant includes that directive in its response. Ask Hermes to show the operation card after planning or reconciliation. CLI and other clients retain the same JSON receipt and selected card fields. HTML export failure is reported separately and never changes an operation's result.
+
+Cards have no JavaScript, external assets or live refresh. They are historical observations, with full image digests and plan identity available in their details. Approval is described as a requirement; the card does not invent a persisted approval record or a server-request count.
 
 ## Understanding receipts
 

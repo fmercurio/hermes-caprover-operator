@@ -1,0 +1,1107 @@
+{
+  "demo_kind": "actual_hermes_cli_real_disposable_caprover",
+  "generated_at": "2026-11-05T20:14:49.605007+00:00",
+  "scope": {
+    "real_caprover": true,
+    "version": "1.16.0",
+    "native_cli": true,
+    "real_model": true,
+    "model": "gpt-6.1-sol",
+    "approval_surface": "native Hermes CLI and Desktop attached to same isolated session; automation-operated",
+    "operator": "automation under user-authorized lab scope",
+    "human_keypress": false,
+    "production_traffic": false,
+    "default_plugin_engine_client": true,
+    "app": "CyberChef",
+    "baseline_version": "11.4.0",
+    "desired_version": "11.5.0",
+    "tls": "ephemeral lab CA for isolated child only"
+  },
+  "events": [
+    {
+      "event": "cli_process",
+      "index": 1,
+      "started_at": "2026-11-05T20:14:49.748216+00:00",
+      "posts_before": 0,
+      "exit_code": 0,
+      "posts_after": 1,
+      "ended_at": "2026-11-05T20:23:20.839633+00:00"
+    },
+    {
+      "event": "cli_process",
+      "index": 2,
+      "started_at": "2026-11-05T20:24:02.916549+00:00",
+      "posts_before": 1,
+      "exit_code": 0,
+      "posts_after": 1,
+      "ended_at": "2026-11-05T20:27:26.036064+00:00"
+    }
+  ],
+  "post_attempts": 1,
+  "plugin_source_sha256": {
+    "__init__.py": "5f5117537f19d3be5d85bf7ace2b8f097de2dbfbbe7a593f83c05b3443b0d3f9",
+    "caprover_operator/__init__.py": "0aa1438d9af523cbb959ed5d2fc817a2d537a172c76c60b2435a8f242c2f059f",
+    "caprover_operator/__main__.py": "18319ba67547ab0e79653c7705873886a981d69f2e1003b70b39e51f390d2405",
+    "caprover_operator/client.py": "d94c7d42242302ea1eac827d70ad2aba146696e7645a393e6528f454c8e69db3",
+    "caprover_operator/demo.py": "cf5e0d743f1f963a95a04e58f507387defcbfd3a104ef8aa001df44bc8f2eeb6",
+    "caprover_operator/diagnostics.py": "20e7012ba26f5bfa82d9df260dd1cd29843d2de1b9e5d4983c79baf07b402fca",
+    "caprover_operator/engine.py": "1ae55ae11e76508f98f09abc402224e20754004312421f5e5db94099dfe47e9c",
+    "caprover_operator/guidance.py": "83d6b32a275c08859b52a5fd63d4d7ce8b9e4591a5620ddf64b18dd65bd7c52b",
+    "caprover_operator/lab.py": "4d967cb61ee0e610ce5eea159e8984c33d8d1f7b0fe63eff0247eb6d8b869042",
+    "caprover_operator/presentation.py": "05287c39a46bfa51cc813a111297e173f18bb3f1e32e6862d0c063ea54405dec",
+    "plugin.yaml": "b7f25ef28c66cf5138c46e3e01582cdd99f983a5c0aa7dcfad6730e9018fea33",
+    "scripts/preview_operation_cards.py": "e45e49b1356ee62ed57c71933c72a0a70e958348a4e032b1a600d02edce95f29"
+  },
+  "tool_results": [
+    {
+      "tool_name": "caprover_doctor",
+      "public_result": {
+        "checked_at": "2026-11-05T20:15:39.363656+00:00",
+        "checks": {
+          "app": {
+            "configured_replicas": 1,
+            "image_known": true,
+            "is_building": false,
+            "status": "found"
+          },
+          "approval": {
+            "deployment_authorized": false,
+            "required": "fresh_native_human",
+            "status": "not_tested",
+            "supported_isolation": "in_process"
+          },
+          "configuration": {
+            "status": "valid"
+          },
+          "connection": {
+            "status": "responded"
+          },
+          "credential": {
+            "status": "accepted_by_api"
+          },
+          "health": {
+            "ok": true,
+            "status": "responded",
+            "status_code": 200
+          },
+          "runtime": {
+            "current_task_count": 1,
+            "desired_instances": 1,
+            "running_instances": 1,
+            "status": "available"
+          }
+        },
+        "guidance": {
+          "automatic": false,
+          "code": "request_immutable_image_plan",
+          "message": "The app API accepted the credential and returned a known image. You can request a plan for an intended immutable image. Local ledger access, native human approval and in_process execution were not tested or authorized.",
+          "next_step": {
+            "arguments": {},
+            "required_input": [
+              "image"
+            ],
+            "requires_native_human_approval": false,
+            "tool": "caprover_plan"
+          }
+        },
+        "limitations": [
+          "local_storage_not_tested",
+          "native_execution_approval_not_tested"
+        ],
+        "read_only": true,
+        "readiness_scope": "planning_only",
+        "status": "ready_for_planning"
+      }
+    },
+    {
+      "tool_name": "caprover_plan",
+      "public_result": {
+        "app": "cyberchef-demo",
+        "baseline": {
+          "app": "cyberchef-demo",
+          "config_fingerprint": "b2bee3f592c3e54bde12cd07c63d718ba50d0e938204206401efa0decc3dee36",
+          "image": "ghcr.io/gchq/cyberchef@sha256:379c6cbcfd8cc10b8e045548f3ebaa82ce429e4b40cf60e4532e116a4c67884d",
+          "is_building": false,
+          "replicas": 1,
+          "running_replicas": 1,
+          "runtime": {
+            "available": true,
+            "current_tasks": [
+              {
+                "desired_state": "running",
+                "image": "ghcr.io/gchq/cyberchef@sha256:379c6cbcfd8cc10b8e045548f3ebaa82ce429e4b40cf60e4532e116a4c67884d",
+                "slot": 1,
+                "state": "running"
+              }
+            ],
+            "desired_instances": 1,
+            "running_instances": 1
+          },
+          "version": 1
+        },
+        "created_at": 1793909742.790134,
+        "expires_at": 1793913342.790134,
+        "guidance": {
+          "automatic": false,
+          "code": "review_then_request_approval",
+          "message": "Review the target, image, baseline and expiry. Apply this saved plan only when you intend the deployment; Hermes will require a fresh native human approval.",
+          "next_step": {
+            "arguments": {
+              "plan_id": "55c6b3ca1423437e8b324f690ba806d1"
+            },
+            "requires_native_human_approval": true,
+            "tool": "caprover_apply"
+          }
+        },
+        "image": "ghcr.io/gchq/cyberchef@sha256:f04a39926344faf8e4cbbc8c92fb125d2b466f9be62db09aff23c7c406101a51",
+        "plan_hash": "33d6def1e3f895235afa922099c6fa3279bb0cd3859f8141328c055811531b05",
+        "plan_id": "55c6b3ca1423437e8b324f690ba806d1",
+        "presentation": {
+          "cards": [
+            {
+              "available": true,
+              "card": {
+                "app": "cyberchef-demo",
+                "approval": {
+                  "record": "Not separately stored in this receipt",
+                  "requirement": "Fresh native human approval for every apply"
+                },
+                "attempt": {
+                  "label": "No attempt marker recorded",
+                  "meaning": "A durable marker precedes the possible POST; it does not prove network delivery or count server requests.",
+                  "recorded": false,
+                  "recorded_at": null
+                },
+                "evidence": {
+                  "baseline_version": 1,
+                  "configured_replicas": 1,
+                  "http": "Not proven",
+                  "http_status": null,
+                  "metadata": "Not proven",
+                  "observed_version": null,
+                  "running_replicas": null,
+                  "runtime": "Exact-image tasks not proven"
+                },
+                "historical": true,
+                "next_step": {
+                  "automatic": false,
+                  "text": "Review the target, image, baseline and expiry. Apply this saved plan only when you intend the deployment; Hermes will require a fresh native human approval.",
+                  "tool": "caprover_apply"
+                },
+                "plan": {
+                  "created_at": "2026-11-05T20:15:42Z",
+                  "expires_at": "2026-11-05T21:15:42Z",
+                  "hash": "33d6def1e3f895235afa922099c6fa3279bb0cd3859f8141328c055811531b05",
+                  "id": "55c6b3ca1423437e8b324f690ba806d1"
+                },
+                "previous_image": {
+                  "full": "ghcr.io/gchq/cyberchef@sha256:379c6cbcfd8cc10b8e045548f3ebaa82ce429e4b40cf60e4532e116a4c67884d",
+                  "short": "ghcr.io/gchq/cyberchef@sha256:379c6cbcfd8c\u2026"
+                },
+                "receipt": {
+                  "display_status": "planned",
+                  "observed_at": null,
+                  "status": "planned",
+                  "title": "Ready for review",
+                  "tone": "neutral"
+                },
+                "requested_image": {
+                  "full": "ghcr.io/gchq/cyberchef@sha256:f04a39926344faf8e4cbbc8c92fb125d2b466f9be62db09aff23c7c406101a51",
+                  "short": "ghcr.io/gchq/cyberchef@sha256:f04a39926344\u2026"
+                },
+                "schema": 1,
+                "target": "https://127.0.0.1:63159"
+              },
+              "file": "/lab/hermes-home/plugin-data/caprover-operator/cards/0957feec1ad5446685ee4fe206e90f36304ff9c16ef4e40e127a6edf5bfa415c.html",
+              "preview": "::preview{file=\"/lab/hermes-home/plugin-data/caprover-operator/cards/0957feec1ad5446685ee4fe206e90f36304ff9c16ef4e40e127a6edf5bfa415c.html\"}"
+            }
+          ],
+          "historical": true,
+          "history_limit": 5,
+          "instruction": "Display each available preview directive unchanged on its own line. These are historical, read-only operation cards. If HTML is unavailable, summarize card facts; do not repeat an operation to repair its presentation.",
+          "kind": "caprover_operation_cards"
+        },
+        "status": "planned",
+        "target": "https://127.0.0.1:63159"
+      }
+    },
+    {
+      "tool_name": "caprover_apply",
+      "public_result": {
+        "app": "cyberchef-demo",
+        "attempted_at": 1793910063.3506932,
+        "baseline": {
+          "app": "cyberchef-demo",
+          "config_fingerprint": "b2bee3f592c3e54bde12cd07c63d718ba50d0e938204206401efa0decc3dee36",
+          "image": "ghcr.io/gchq/cyberchef@sha256:379c6cbcfd8cc10b8e045548f3ebaa82ce429e4b40cf60e4532e116a4c67884d",
+          "is_building": false,
+          "replicas": 1,
+          "running_replicas": 1,
+          "runtime": {
+            "available": true,
+            "current_tasks": [
+              {
+                "desired_state": "running",
+                "image": "ghcr.io/gchq/cyberchef@sha256:379c6cbcfd8cc10b8e045548f3ebaa82ce429e4b40cf60e4532e116a4c67884d",
+                "slot": 1,
+                "state": "running"
+              }
+            ],
+            "desired_instances": 1,
+            "running_instances": 1
+          },
+          "version": 1
+        },
+        "checks": {
+          "post_attempted": true,
+          "preflight": "matched",
+          "runtime_rollout_proven": false
+        },
+        "consumed_at": 1793910063.2883599,
+        "created_at": 1793909742.790134,
+        "expires_at": 1793913342.790134,
+        "guidance": {
+          "automatic": false,
+          "code": "reconcile_same_operation",
+          "message": "The deployment outcome is uncertain. Explicitly reconcile this same saved plan. Do not repeat apply, delete the ledger or create a replacement to bypass uncertainty.",
+          "next_step": {
+            "arguments": {
+              "plan_id": "55c6b3ca1423437e8b324f690ba806d1"
+            },
+            "requires_native_human_approval": false,
+            "tool": "caprover_reconcile"
+          }
+        },
+        "image": "ghcr.io/gchq/cyberchef@sha256:f04a39926344faf8e4cbbc8c92fb125d2b466f9be62db09aff23c7c406101a51",
+        "plan_hash": "33d6def1e3f895235afa922099c6fa3279bb0cd3859f8141328c055811531b05",
+        "plan_id": "55c6b3ca1423437e8b324f690ba806d1",
+        "presentation": {
+          "cards": [
+            {
+              "available": true,
+              "card": {
+                "app": "cyberchef-demo",
+                "approval": {
+                  "record": "Not separately stored in this receipt",
+                  "requirement": "Fresh native human approval for every apply"
+                },
+                "attempt": {
+                  "label": "Attempt marker recorded",
+                  "meaning": "A durable marker precedes the possible POST; it does not prove network delivery or count server requests.",
+                  "recorded": true,
+                  "recorded_at": "2026-11-05T20:21:03Z"
+                },
+                "evidence": {
+                  "baseline_version": 1,
+                  "configured_replicas": 1,
+                  "http": "Not proven",
+                  "http_status": null,
+                  "metadata": "Not proven",
+                  "observed_version": null,
+                  "running_replicas": null,
+                  "runtime": "Exact-image tasks not proven"
+                },
+                "historical": true,
+                "next_step": {
+                  "automatic": false,
+                  "text": "The deployment outcome is uncertain. Explicitly reconcile this same saved plan. Do not repeat apply, delete the ledger or create a replacement to bypass uncertainty.",
+                  "tool": "caprover_reconcile"
+                },
+                "plan": {
+                  "created_at": "2026-11-05T20:15:42Z",
+                  "expires_at": "2026-11-05T21:15:42Z",
+                  "hash": "33d6def1e3f895235afa922099c6fa3279bb0cd3859f8141328c055811531b05",
+                  "id": "55c6b3ca1423437e8b324f690ba806d1"
+                },
+                "previous_image": {
+                  "full": "ghcr.io/gchq/cyberchef@sha256:379c6cbcfd8cc10b8e045548f3ebaa82ce429e4b40cf60e4532e116a4c67884d",
+                  "short": "ghcr.io/gchq/cyberchef@sha256:379c6cbcfd8c\u2026"
+                },
+                "receipt": {
+                  "display_status": "reconcile_required",
+                  "observed_at": null,
+                  "status": "reconcile_required",
+                  "title": "Outcome uncertain",
+                  "tone": "warning"
+                },
+                "requested_image": {
+                  "full": "ghcr.io/gchq/cyberchef@sha256:f04a39926344faf8e4cbbc8c92fb125d2b466f9be62db09aff23c7c406101a51",
+                  "short": "ghcr.io/gchq/cyberchef@sha256:f04a39926344\u2026"
+                },
+                "schema": 1,
+                "target": "https://127.0.0.1:63159"
+              },
+              "file": "/lab/hermes-home/plugin-data/caprover-operator/cards/6e66a6c006b066b37f32c47e95d517174c6fd90427426343d06c0d4aa2e4a447.html",
+              "preview": "::preview{file=\"/lab/hermes-home/plugin-data/caprover-operator/cards/6e66a6c006b066b37f32c47e95d517174c6fd90427426343d06c0d4aa2e4a447.html\"}"
+            }
+          ],
+          "historical": true,
+          "history_limit": 5,
+          "instruction": "Display each available preview directive unchanged on its own line. These are historical, read-only operation cards. If HTML is unavailable, summarize card facts; do not repeat an operation to repair its presentation.",
+          "kind": "caprover_operation_cards"
+        },
+        "requested": {
+          "image": "ghcr.io/gchq/cyberchef@sha256:f04a39926344faf8e4cbbc8c92fb125d2b466f9be62db09aff23c7c406101a51"
+        },
+        "status": "reconcile_required",
+        "target": "https://127.0.0.1:63159",
+        "trigger_outcome": "uncertain"
+      }
+    },
+    {
+      "tool_name": "caprover_status",
+      "public_result": {
+        "app": "cyberchef-demo",
+        "attempted_at": 1793910063.3506932,
+        "baseline": {
+          "app": "cyberchef-demo",
+          "config_fingerprint": "b2bee3f592c3e54bde12cd07c63d718ba50d0e938204206401efa0decc3dee36",
+          "image": "ghcr.io/gchq/cyberchef@sha256:379c6cbcfd8cc10b8e045548f3ebaa82ce429e4b40cf60e4532e116a4c67884d",
+          "is_building": false,
+          "replicas": 1,
+          "running_replicas": 1,
+          "runtime": {
+            "available": true,
+            "current_tasks": [
+              {
+                "desired_state": "running",
+                "image": "ghcr.io/gchq/cyberchef@sha256:379c6cbcfd8cc10b8e045548f3ebaa82ce429e4b40cf60e4532e116a4c67884d",
+                "slot": 1,
+                "state": "running"
+              }
+            ],
+            "desired_instances": 1,
+            "running_instances": 1
+          },
+          "version": 1
+        },
+        "checks": {
+          "post_attempted": true,
+          "preflight": "matched",
+          "runtime_rollout_proven": false
+        },
+        "consumed_at": 1793910063.2883599,
+        "created_at": 1793909742.790134,
+        "expires_at": 1793913342.790134,
+        "guidance": {
+          "automatic": false,
+          "code": "reconcile_same_operation",
+          "message": "The deployment outcome is uncertain. Explicitly reconcile this same saved plan. Do not repeat apply, delete the ledger or create a replacement to bypass uncertainty.",
+          "next_step": {
+            "arguments": {
+              "plan_id": "55c6b3ca1423437e8b324f690ba806d1"
+            },
+            "requires_native_human_approval": false,
+            "tool": "caprover_reconcile"
+          }
+        },
+        "image": "ghcr.io/gchq/cyberchef@sha256:f04a39926344faf8e4cbbc8c92fb125d2b466f9be62db09aff23c7c406101a51",
+        "plan_hash": "33d6def1e3f895235afa922099c6fa3279bb0cd3859f8141328c055811531b05",
+        "plan_id": "55c6b3ca1423437e8b324f690ba806d1",
+        "presentation": {
+          "cards": [
+            {
+              "available": true,
+              "card": {
+                "app": "cyberchef-demo",
+                "approval": {
+                  "record": "Not separately stored in this receipt",
+                  "requirement": "Fresh native human approval for every apply"
+                },
+                "attempt": {
+                  "label": "Attempt marker recorded",
+                  "meaning": "A durable marker precedes the possible POST; it does not prove network delivery or count server requests.",
+                  "recorded": true,
+                  "recorded_at": "2026-11-05T20:21:03Z"
+                },
+                "evidence": {
+                  "baseline_version": 1,
+                  "configured_replicas": 1,
+                  "http": "Not proven",
+                  "http_status": null,
+                  "metadata": "Not proven",
+                  "observed_version": null,
+                  "running_replicas": null,
+                  "runtime": "Exact-image tasks not proven"
+                },
+                "historical": true,
+                "next_step": {
+                  "automatic": false,
+                  "text": "The deployment outcome is uncertain. Explicitly reconcile this same saved plan. Do not repeat apply, delete the ledger or create a replacement to bypass uncertainty.",
+                  "tool": "caprover_reconcile"
+                },
+                "plan": {
+                  "created_at": "2026-11-05T20:15:42Z",
+                  "expires_at": "2026-11-05T21:15:42Z",
+                  "hash": "33d6def1e3f895235afa922099c6fa3279bb0cd3859f8141328c055811531b05",
+                  "id": "55c6b3ca1423437e8b324f690ba806d1"
+                },
+                "previous_image": {
+                  "full": "ghcr.io/gchq/cyberchef@sha256:379c6cbcfd8cc10b8e045548f3ebaa82ce429e4b40cf60e4532e116a4c67884d",
+                  "short": "ghcr.io/gchq/cyberchef@sha256:379c6cbcfd8c\u2026"
+                },
+                "receipt": {
+                  "display_status": "reconcile_required",
+                  "observed_at": null,
+                  "status": "reconcile_required",
+                  "title": "Outcome uncertain",
+                  "tone": "warning"
+                },
+                "requested_image": {
+                  "full": "ghcr.io/gchq/cyberchef@sha256:f04a39926344faf8e4cbbc8c92fb125d2b466f9be62db09aff23c7c406101a51",
+                  "short": "ghcr.io/gchq/cyberchef@sha256:f04a39926344\u2026"
+                },
+                "schema": 1,
+                "target": "https://127.0.0.1:63159"
+              },
+              "file": "/lab/hermes-home/plugin-data/caprover-operator/cards/6e66a6c006b066b37f32c47e95d517174c6fd90427426343d06c0d4aa2e4a447.html",
+              "preview": "::preview{file=\"/lab/hermes-home/plugin-data/caprover-operator/cards/6e66a6c006b066b37f32c47e95d517174c6fd90427426343d06c0d4aa2e4a447.html\"}"
+            }
+          ],
+          "historical": true,
+          "history_limit": 5,
+          "instruction": "Display each available preview directive unchanged on its own line. These are historical, read-only operation cards. If HTML is unavailable, summarize card facts; do not repeat an operation to repair its presentation.",
+          "kind": "caprover_operation_cards"
+        },
+        "requested": {
+          "image": "ghcr.io/gchq/cyberchef@sha256:f04a39926344faf8e4cbbc8c92fb125d2b466f9be62db09aff23c7c406101a51"
+        },
+        "status": "reconcile_required",
+        "target": "https://127.0.0.1:63159",
+        "trigger_outcome": "uncertain"
+      }
+    },
+    {
+      "tool_name": "caprover_apply",
+      "public_result": {
+        "error": {
+          "code": "plan_not_applicable",
+          "message": "The plan is not pending or does not match the configured CapRover app."
+        },
+        "guidance": {
+          "automatic": false,
+          "code": "inspect_saved_operation",
+          "message": "Inspect the saved plan and its status. If it is uncertain, reconcile it instead of applying again. A completed or consumed plan cannot authorize a new deployment.",
+          "next_step": {
+            "arguments": {
+              "plan_id": "55c6b3ca1423437e8b324f690ba806d1"
+            },
+            "requires_native_human_approval": false,
+            "tool": "caprover_status"
+          }
+        }
+      }
+    },
+    {
+      "tool_name": "caprover_reconcile",
+      "public_result": {
+        "app": "cyberchef-demo",
+        "attempted_at": 1793910063.3506932,
+        "baseline": {
+          "app": "cyberchef-demo",
+          "config_fingerprint": "b2bee3f592c3e54bde12cd07c63d718ba50d0e938204206401efa0decc3dee36",
+          "image": "ghcr.io/gchq/cyberchef@sha256:379c6cbcfd8cc10b8e045548f3ebaa82ce429e4b40cf60e4532e116a4c67884d",
+          "is_building": false,
+          "replicas": 1,
+          "running_replicas": 1,
+          "runtime": {
+            "available": true,
+            "current_tasks": [
+              {
+                "desired_state": "running",
+                "image": "ghcr.io/gchq/cyberchef@sha256:379c6cbcfd8cc10b8e045548f3ebaa82ce429e4b40cf60e4532e116a4c67884d",
+                "slot": 1,
+                "state": "running"
+              }
+            ],
+            "desired_instances": 1,
+            "running_instances": 1
+          },
+          "version": 1
+        },
+        "checks": {
+          "configured_replicas": 1,
+          "deployment_recorded": true,
+          "exact_image": true,
+          "http_health": {
+            "configured": true,
+            "ok": true,
+            "reason": "health_passed",
+            "status_code": 200
+          },
+          "newer_version": true,
+          "not_building": true,
+          "replica_evidence": "observed",
+          "running_replicas": 1,
+          "runtime_rollout_proven": true
+        },
+        "consumed_at": 1793910063.2883599,
+        "created_at": 1793909742.790134,
+        "expires_at": 1793913342.790134,
+        "first_metadata_observed": {
+          "image": "ghcr.io/gchq/cyberchef@sha256:f04a39926344faf8e4cbbc8c92fb125d2b466f9be62db09aff23c7c406101a51",
+          "observed_at": 1793910369.388181,
+          "version": 2
+        },
+        "guidance": {
+          "automatic": false,
+          "code": "inspect_dated_receipt",
+          "message": "The dated task and HTTP evidence passed. Keep the receipt; it does not prove migrations, ongoing availability or exclusive causation.",
+          "next_step": {
+            "arguments": {
+              "plan_id": "55c6b3ca1423437e8b324f690ba806d1"
+            },
+            "requires_native_human_approval": false,
+            "tool": "caprover_status"
+          }
+        },
+        "image": "ghcr.io/gchq/cyberchef@sha256:f04a39926344faf8e4cbbc8c92fb125d2b466f9be62db09aff23c7c406101a51",
+        "observation": "available",
+        "observation_history": [
+          {
+            "checks": {
+              "configured_replicas": 1,
+              "deployment_recorded": true,
+              "exact_image": true,
+              "http_health": {
+                "configured": true,
+                "ok": true,
+                "reason": "health_passed",
+                "status_code": 200
+              },
+              "newer_version": true,
+              "not_building": true,
+              "replica_evidence": "observed",
+              "running_replicas": 1,
+              "runtime_rollout_proven": true
+            },
+            "image": "ghcr.io/gchq/cyberchef@sha256:f04a39926344faf8e4cbbc8c92fb125d2b466f9be62db09aff23c7c406101a51",
+            "observation": "available",
+            "observed_at": 1793910369.388181,
+            "status": "verified",
+            "version": 2
+          }
+        ],
+        "observed": {
+          "app": "cyberchef-demo",
+          "config_fingerprint": "49730f533ffbab0022b39502f31ceedd6c85f42f51b34985bbaff0ebe3dc71a1",
+          "image": "ghcr.io/gchq/cyberchef@sha256:f04a39926344faf8e4cbbc8c92fb125d2b466f9be62db09aff23c7c406101a51",
+          "is_building": false,
+          "replicas": 1,
+          "running_replicas": 1,
+          "runtime": {
+            "available": true,
+            "current_tasks": [
+              {
+                "desired_state": "running",
+                "image": "ghcr.io/gchq/cyberchef@sha256:f04a39926344faf8e4cbbc8c92fb125d2b466f9be62db09aff23c7c406101a51",
+                "slot": 1,
+                "state": "running"
+              }
+            ],
+            "desired_instances": 1,
+            "running_instances": 1
+          },
+          "version": 2
+        },
+        "observed_at": 1793910369.388181,
+        "plan_hash": "33d6def1e3f895235afa922099c6fa3279bb0cd3859f8141328c055811531b05",
+        "plan_id": "55c6b3ca1423437e8b324f690ba806d1",
+        "presentation": {
+          "cards": [
+            {
+              "available": true,
+              "card": {
+                "app": "cyberchef-demo",
+                "approval": {
+                  "record": "Not separately stored in this receipt",
+                  "requirement": "Fresh native human approval for every apply"
+                },
+                "attempt": {
+                  "label": "Attempt marker recorded",
+                  "meaning": "A durable marker precedes the possible POST; it does not prove network delivery or count server requests.",
+                  "recorded": true,
+                  "recorded_at": "2026-11-05T20:21:03Z"
+                },
+                "evidence": {
+                  "baseline_version": 1,
+                  "configured_replicas": 1,
+                  "http": "Passed",
+                  "http_status": 200,
+                  "metadata": "Requested image recorded",
+                  "observed_version": 2,
+                  "running_replicas": 1,
+                  "runtime": "Exact-image tasks proven"
+                },
+                "historical": true,
+                "next_step": {
+                  "automatic": false,
+                  "text": "The dated task and HTTP evidence passed. Keep the receipt; it does not prove migrations, ongoing availability or exclusive causation.",
+                  "tool": "caprover_status"
+                },
+                "plan": {
+                  "created_at": "2026-11-05T20:15:42Z",
+                  "expires_at": "2026-11-05T21:15:42Z",
+                  "hash": "33d6def1e3f895235afa922099c6fa3279bb0cd3859f8141328c055811531b05",
+                  "id": "55c6b3ca1423437e8b324f690ba806d1"
+                },
+                "previous_image": {
+                  "full": "ghcr.io/gchq/cyberchef@sha256:379c6cbcfd8cc10b8e045548f3ebaa82ce429e4b40cf60e4532e116a4c67884d",
+                  "short": "ghcr.io/gchq/cyberchef@sha256:379c6cbcfd8c\u2026"
+                },
+                "receipt": {
+                  "display_status": "verified",
+                  "observed_at": "2026-11-05T20:26:09Z",
+                  "status": "verified",
+                  "title": "Rollout evidence verified",
+                  "tone": "success"
+                },
+                "requested_image": {
+                  "full": "ghcr.io/gchq/cyberchef@sha256:f04a39926344faf8e4cbbc8c92fb125d2b466f9be62db09aff23c7c406101a51",
+                  "short": "ghcr.io/gchq/cyberchef@sha256:f04a39926344\u2026"
+                },
+                "schema": 1,
+                "target": "https://127.0.0.1:63159"
+              },
+              "file": "/lab/hermes-home/plugin-data/caprover-operator/cards/12621585c33b09084d59a9768174fc1b2828085f8e3572e60041cfeee3eedd07.html",
+              "preview": "::preview{file=\"/lab/hermes-home/plugin-data/caprover-operator/cards/12621585c33b09084d59a9768174fc1b2828085f8e3572e60041cfeee3eedd07.html\"}"
+            }
+          ],
+          "historical": true,
+          "history_limit": 5,
+          "instruction": "Display each available preview directive unchanged on its own line. These are historical, read-only operation cards. If HTML is unavailable, summarize card facts; do not repeat an operation to repair its presentation.",
+          "kind": "caprover_operation_cards"
+        },
+        "requested": {
+          "image": "ghcr.io/gchq/cyberchef@sha256:f04a39926344faf8e4cbbc8c92fb125d2b466f9be62db09aff23c7c406101a51"
+        },
+        "status": "verified",
+        "target": "https://127.0.0.1:63159",
+        "trigger_outcome": "uncertain"
+      }
+    }
+  ],
+  "backend_acknowledgements": [
+    {
+      "http_status": 200,
+      "captain_status": 100
+    }
+  ],
+  "app_manifest": {
+    "app": "CyberChef",
+    "license": "Apache-2.0",
+    "repository": "https://github.com/gchq/CyberChef",
+    "official_package": "https://github.com/gchq/CyberChef/pkgs/container/cyberchef",
+    "verified_at_utc": "2026-11-05T20:05:06.411614+00:00",
+    "caprover_app": "cyberchef-demo",
+    "container_port": 8080,
+    "health_path": "/",
+    "before": {
+      "version": "11.4.0",
+      "image": "ghcr.io/gchq/cyberchef@sha256:379c6cbcfd8cc10b8e045548f3ebaa82ce429e4b40cf60e4532e116a4c67884d",
+      "arm64_manifest": "sha256:cdaf8a684ba2f7b82f0f818391f67670c7574dd84509d01a83b78ad49ae8533d"
+    },
+    "after": {
+      "version": "11.5.0",
+      "image": "ghcr.io/gchq/cyberchef@sha256:f04a39926344faf8e4cbbc8c92fb125d2b466f9be62db09aff23c7c406101a51",
+      "arm64_manifest": "sha256:8bbc0978679ef94183450433fdcca64215cad14cfcc22c9af042c282b273cfe4"
+    },
+    "new_operation": "Parse PGP Key",
+    "public_fixture": {
+      "source": "https://github.com/gchq/CyberChef/blob/v11.5.0/tests/operations/tests/PGP.mjs",
+      "test_name": "Parse PGP Key: RFC9580 legacy V4 (A.1)",
+      "path": "work/demo-v4-app/cyberchef-rfc9580-public-key.asc",
+      "sha256": "35c56c2201a969ddc47fa87af99ad025935be2b58976a93fea1adbc3b4307e23",
+      "classification": "public RFC example key; no private key"
+    },
+    "after_fragment": "#recipe=Parse_PGP_Key()&input=LS0tLS1CRUdJTiBQR1AgUFVCTElDIEtFWSBCTE9DSy0tLS0tCgp4ak1FVS9OZkN4WUpLd1lCQkFIYVJ3OEJBUWRBUHdtSmxMM1pGdTFBVXhsNU5PU29mSUJ6T2hLQTFpK0FFSmt1ClErNDdKQVk9Ci0tLS0tRU5EIFBHUCBQVUJMSUMgS0VZIEJMT0NLLS0tLS0K&theme=dark",
+    "limits": [
+      "No persistent server data required",
+      "No API credentials required",
+      "Browser-only operation; no outbound calls needed for this recipe",
+      "No claim about preservation or migration of persistent application data",
+      "Runtime image proof must come from CapRover task evidence; UI is a separate visual observation"
+    ]
+  },
+  "final_public_status": {
+    "guidance": {
+      "automatic": false,
+      "code": "inspect_saved_operations",
+      "message": "Choose the saved operation you want to inspect. Reconcile uncertain operations explicitly; suggestions never execute themselves.",
+      "next_step": {
+        "arguments": {},
+        "required_input": [
+          "plan_id"
+        ],
+        "requires_native_human_approval": false,
+        "tool": "caprover_status"
+      }
+    },
+    "limit": 20,
+    "operations": [
+      {
+        "app": "cyberchef-demo",
+        "attempted_at": 1793910063.3506932,
+        "baseline": {
+          "app": "cyberchef-demo",
+          "config_fingerprint": "b2bee3f592c3e54bde12cd07c63d718ba50d0e938204206401efa0decc3dee36",
+          "image": "ghcr.io/gchq/cyberchef@sha256:379c6cbcfd8cc10b8e045548f3ebaa82ce429e4b40cf60e4532e116a4c67884d",
+          "is_building": false,
+          "replicas": 1,
+          "running_replicas": 1,
+          "runtime": {
+            "available": true,
+            "current_tasks": [
+              {
+                "desired_state": "running",
+                "image": "ghcr.io/gchq/cyberchef@sha256:379c6cbcfd8cc10b8e045548f3ebaa82ce429e4b40cf60e4532e116a4c67884d",
+                "slot": 1,
+                "state": "running"
+              }
+            ],
+            "desired_instances": 1,
+            "running_instances": 1
+          },
+          "version": 1
+        },
+        "checks": {
+          "configured_replicas": 1,
+          "deployment_recorded": true,
+          "exact_image": true,
+          "http_health": {
+            "configured": true,
+            "ok": true,
+            "reason": "health_passed",
+            "status_code": 200
+          },
+          "newer_version": true,
+          "not_building": true,
+          "replica_evidence": "observed",
+          "running_replicas": 1,
+          "runtime_rollout_proven": true
+        },
+        "consumed_at": 1793910063.2883599,
+        "created_at": 1793909742.790134,
+        "expires_at": 1793913342.790134,
+        "first_metadata_observed": {
+          "image": "ghcr.io/gchq/cyberchef@sha256:f04a39926344faf8e4cbbc8c92fb125d2b466f9be62db09aff23c7c406101a51",
+          "observed_at": 1793910369.388181,
+          "version": 2
+        },
+        "guidance": {
+          "automatic": false,
+          "code": "inspect_dated_receipt",
+          "message": "The dated task and HTTP evidence passed. Keep the receipt; it does not prove migrations, ongoing availability or exclusive causation.",
+          "next_step": {
+            "arguments": {
+              "plan_id": "55c6b3ca1423437e8b324f690ba806d1"
+            },
+            "requires_native_human_approval": false,
+            "tool": "caprover_status"
+          }
+        },
+        "image": "ghcr.io/gchq/cyberchef@sha256:f04a39926344faf8e4cbbc8c92fb125d2b466f9be62db09aff23c7c406101a51",
+        "observation": "available",
+        "observation_history": [
+          {
+            "checks": {
+              "configured_replicas": 1,
+              "deployment_recorded": true,
+              "exact_image": true,
+              "http_health": {
+                "configured": true,
+                "ok": true,
+                "reason": "health_passed",
+                "status_code": 200
+              },
+              "newer_version": true,
+              "not_building": true,
+              "replica_evidence": "observed",
+              "running_replicas": 1,
+              "runtime_rollout_proven": true
+            },
+            "image": "ghcr.io/gchq/cyberchef@sha256:f04a39926344faf8e4cbbc8c92fb125d2b466f9be62db09aff23c7c406101a51",
+            "observation": "available",
+            "observed_at": 1793910369.388181,
+            "status": "verified",
+            "version": 2
+          }
+        ],
+        "observed": {
+          "app": "cyberchef-demo",
+          "config_fingerprint": "49730f533ffbab0022b39502f31ceedd6c85f42f51b34985bbaff0ebe3dc71a1",
+          "image": "ghcr.io/gchq/cyberchef@sha256:f04a39926344faf8e4cbbc8c92fb125d2b466f9be62db09aff23c7c406101a51",
+          "is_building": false,
+          "replicas": 1,
+          "running_replicas": 1,
+          "runtime": {
+            "available": true,
+            "current_tasks": [
+              {
+                "desired_state": "running",
+                "image": "ghcr.io/gchq/cyberchef@sha256:f04a39926344faf8e4cbbc8c92fb125d2b466f9be62db09aff23c7c406101a51",
+                "slot": 1,
+                "state": "running"
+              }
+            ],
+            "desired_instances": 1,
+            "running_instances": 1
+          },
+          "version": 2
+        },
+        "observed_at": 1793910369.388181,
+        "plan_hash": "33d6def1e3f895235afa922099c6fa3279bb0cd3859f8141328c055811531b05",
+        "plan_id": "55c6b3ca1423437e8b324f690ba806d1",
+        "requested": {
+          "image": "ghcr.io/gchq/cyberchef@sha256:f04a39926344faf8e4cbbc8c92fb125d2b466f9be62db09aff23c7c406101a51"
+        },
+        "status": "verified",
+        "target": "https://127.0.0.1:63159",
+        "trigger_outcome": "uncertain"
+      }
+    ],
+    "presentation": {
+      "cards": [
+        {
+          "available": true,
+          "card": {
+            "app": "cyberchef-demo",
+            "approval": {
+              "record": "Not separately stored in this receipt",
+              "requirement": "Fresh native human approval for every apply"
+            },
+            "attempt": {
+              "label": "Attempt marker recorded",
+              "meaning": "A durable marker precedes the possible POST; it does not prove network delivery or count server requests.",
+              "recorded": true,
+              "recorded_at": "2026-11-05T20:21:03Z"
+            },
+            "evidence": {
+              "baseline_version": 1,
+              "configured_replicas": 1,
+              "http": "Passed",
+              "http_status": 200,
+              "metadata": "Requested image recorded",
+              "observed_version": 2,
+              "running_replicas": 1,
+              "runtime": "Exact-image tasks proven"
+            },
+            "historical": true,
+            "next_step": {
+              "automatic": false,
+              "text": "The dated task and HTTP evidence passed. Keep the receipt; it does not prove migrations, ongoing availability or exclusive causation.",
+              "tool": "caprover_status"
+            },
+            "plan": {
+              "created_at": "2026-11-05T20:15:42Z",
+              "expires_at": "2026-11-05T21:15:42Z",
+              "hash": "33d6def1e3f895235afa922099c6fa3279bb0cd3859f8141328c055811531b05",
+              "id": "55c6b3ca1423437e8b324f690ba806d1"
+            },
+            "previous_image": {
+              "full": "ghcr.io/gchq/cyberchef@sha256:379c6cbcfd8cc10b8e045548f3ebaa82ce429e4b40cf60e4532e116a4c67884d",
+              "short": "ghcr.io/gchq/cyberchef@sha256:379c6cbcfd8c\u2026"
+            },
+            "receipt": {
+              "display_status": "verified",
+              "observed_at": "2026-11-05T20:26:09Z",
+              "status": "verified",
+              "title": "Rollout evidence verified",
+              "tone": "success"
+            },
+            "requested_image": {
+              "full": "ghcr.io/gchq/cyberchef@sha256:f04a39926344faf8e4cbbc8c92fb125d2b466f9be62db09aff23c7c406101a51",
+              "short": "ghcr.io/gchq/cyberchef@sha256:f04a39926344\u2026"
+            },
+            "schema": 1,
+            "target": "https://127.0.0.1:63159"
+          },
+          "file": "/lab/hermes-home/plugin-data/caprover-operator/cards/12621585c33b09084d59a9768174fc1b2828085f8e3572e60041cfeee3eedd07.html",
+          "preview": "::preview{file=\"/lab/hermes-home/plugin-data/caprover-operator/cards/12621585c33b09084d59a9768174fc1b2828085f8e3572e60041cfeee3eedd07.html\"}"
+        }
+      ],
+      "historical": true,
+      "history_limit": 5,
+      "instruction": "Display each available preview directive unchanged on its own line. These are historical, read-only operation cards. If HTML is unavailable, summarize card facts; do not repeat an operation to repair its presentation.",
+      "kind": "caprover_operation_cards"
+    },
+    "target": "https://127.0.0.1:63159"
+  },
+  "capture_annotations": {
+    "raw_source_file": "work/hermes-v4-real-cli-trace.json",
+    "raw_source_sha256": "01ac85209f066854811af523ea66ba16084d9327346b322546ff2a2cf1e93290",
+    "raw_source_preserved_unmodified": true,
+    "description_only_changes": [
+      {
+        "path": "scope.approval_surface",
+        "raw_value": "unmodified native CLI",
+        "public_value": "native Hermes CLI and Desktop attached to same isolated session; automation-operated",
+        "reason": "Both native CLI and Desktop were attached to the same isolated session. The raw recorder label was narrower than the observed capture setup."
+      },
+      {
+        "path": "presentation.cards[].file and presentation.cards[].preview in tool results/final status",
+        "transformation": "Replaced the absolute capture profile prefix with /lab/hermes-home; retained the suffix and content-hash filename unchanged.",
+        "changed_field_count": 10,
+        "reason": "Remove the user workspace path while preserving artifact identity and every recorded operation fact."
+      }
+    ],
+    "unchanged_evidence_fields": [
+      "events",
+      "post_attempts",
+      "backend_acknowledgements",
+      "plugin_source_sha256",
+      "app_manifest"
+    ],
+    "approval_response_ui_attribution": "The exact responding UI was not attributed because CLI and Desktop were both connected. The operator was authorized lab automation; no manual human keypress is claimed.",
+    "gateway_restart": {
+      "source_file": "work/demo-v4-restart-evidence.json",
+      "source_sha256": "5b9f3fcb3353784e1b87ad54a7d1140f3fe23cd7587e1480fc4fcc9c89bca6f8",
+      "scope": "only disposable demo profile",
+      "stopped_desktop_pid": 97187,
+      "stopped_gateway_pid": 96824,
+      "new_gateway_pid": 184,
+      "stopped_at_utc": "2026-11-05T20:23:44.046182+00:00",
+      "new_gateway_start_time_recorded_raw": 179391024524,
+      "observation": "The isolated Desktop/gateway were stopped and a new gateway process was observed. This is separate from the two CLI process events above."
+    },
+    "desktop_and_app_observations": {
+      "method": "Computer-use inspection of the actual Hermes Desktop and browser UI; captured images were also visually inspected. No card UI was fabricated as a video overlay.",
+      "inline_card_verified": true,
+      "cyberchef_baseline_version_observed": "11.4.0",
+      "cyberchef_after_version_observed": "11.5.0",
+      "after_operation": "Parse PGP Key",
+      "after_output_fingerprint": "C959BDBAFA32A2F89A153B678CFDE12197965A9A",
+      "fixture": "Public RFC 9580 example from official CyberChef tests; no private key.",
+      "browser_origin_note": "The after capture used http://localhost:62744/ to avoid stale browser content under http://127.0.0.1:62744/. Both names reached the same fixed loopback laboratory port. The version modal and functional output were checked after the load.",
+      "captures": [
+        {
+          "file": "card-planned.jpg",
+          "sha256": "83c00b2f87bc5d96bf0776257d71234754717aba72673c998d866faed1a5bf08"
+        },
+        {
+          "file": "card-uncertain.jpg",
+          "sha256": "2140d4f2e5891482d42c16eb410f56013325a69421b8fba2eb52e78f711e5fe3"
+        },
+        {
+          "file": "card-verified.jpg",
+          "sha256": "6a6639ec22704b4ef9360b6d3b83dc8656dcfd359d9837ed92a9ae0da6707d8b"
+        },
+        {
+          "file": "cyberchef-after-search.jpg",
+          "sha256": "0266f6098fa6d2ee5585326bf91a5726df09b8c16893ab9b2b2f8d0b6b99fbf2"
+        },
+        {
+          "file": "cyberchef-after-version.jpg",
+          "sha256": "874066c97c59e32a120571b786835bc05fdd9ce095964e7f1250a02f33e55222"
+        },
+        {
+          "file": "cyberchef-after-working.jpg",
+          "sha256": "0564b1f16ec19dcb544cb7f037b3ff1e4ac4e015283aa00e776f64f47ea86265"
+        },
+        {
+          "file": "cyberchef-before-search.jpg",
+          "sha256": "f54cdbf5aa9d93754c028983ab1056a5f488999626a82fc5a29f4a5cfe9cbe0a"
+        },
+        {
+          "file": "cyberchef-before-version.jpg",
+          "sha256": "919f96b6f444a180d385ad7b811fa06481a0cf0efd197645972238dd9ee40e8e"
+        },
+        {
+          "file": "hermes-plan-context.png",
+          "sha256": "c4cf6ef5de63c9e085cee12ca7baa1703e44fd8f55e63d580e241fdb3f49e368"
+        },
+        {
+          "file": "hermes-uncertain-context.png",
+          "sha256": "60f1df39fc133f0748ef09ff239bdebba1f79a127a1a0a78155e3087c7dce250"
+        }
+      ]
+    },
+    "source_verification": {
+      "matched_entries": 12,
+      "total_entries": 12,
+      "plugin_version": "0.3.0",
+      "result": "Every recorded plugin source/manifest hash matched the repository bytes before this documentation change."
+    },
+    "tool_result_preservation": "tool_results and final_public_status are unchanged except for the declared presentation file/preview path-prefix replacement. Statuses, checks, cards facts, operation IDs, timestamps and counters are preserved.",
+    "runtime_source_identity": {
+      "source_file": "work/demo-v4-runtime-source-check.json",
+      "source_sha256": "f1e2c5e81fb89bc5e2e68ac70a97dc10fa41c7f2b203b4633e7fbf6bbea9604a",
+      "cli_banner": "unknown version",
+      "comparison": {
+        "compared_commit": "f0d94882e89ab8d4098b5bb2f166adfb9ee0a0ab",
+        "files": [
+          {
+            "path": "run_agent.py",
+            "matches": true,
+            "sha256": "8f8df32b0a027516c11ec58221d266048d0b76157599aa3934b4348add52a643"
+          },
+          {
+            "path": "model_tools.py",
+            "matches": true,
+            "sha256": "252418e89742093a27cbb82b6abd3f7b4512045282fef119a2630ac9deb5fd0f"
+          },
+          {
+            "path": "agent/tool_executor.py",
+            "matches": true,
+            "sha256": "55118b5d320e2cde5c64ce4de6f34b027a598658ea5df86adedc98c026afbffc"
+          },
+          {
+            "path": "hermes_cli/plugins.py",
+            "matches": true,
+            "sha256": "0da0ebe88da76f4a73d77fcc6942ef549154abbc573d52d74c1608bcb61efce4"
+          },
+          {
+            "path": "hermes_cli/middleware.py",
+            "matches": true,
+            "sha256": "d563bca8757d3e9e2766db905d457fdc96de427d873b40d48e3a624f78d7c589"
+          },
+          {
+            "path": "tools/approval.py",
+            "matches": true,
+            "sha256": "2c534ea5838d7b0508150bd8454741d0c49bc291ad22edb38446432087ccee58"
+          },
+          {
+            "path": "tools/approval_context.py",
+            "matches": true,
+            "sha256": "9bcac985edbcd610392ac40c84c47ca38f169976f42b7e4acade5eb82709dd97"
+          }
+        ],
+        "all_match": true
+      },
+      "scope": "These seven live managed-runtime files matched public Hermes v0.22.6 commit f0d94882e89ab8d4098b5bb2f166adfb9ee0a0ab. This is not a comparison of every runtime file.",
+      "desktop_ui": {
+        "reported_version": "0.22.7",
+        "build_revision": "b200f5b",
+        "scope": "Locally installed Desktop UI bundle; separate from the compared CLI/gateway runtime."
+      }
+    },
+    "public_card_snapshots": {
+      "planned": {
+        "path": "cards-v4/0957feec1ad5446685ee4fe206e90f36304ff9c16ef4e40e127a6edf5bfa415c.html",
+        "sha256": "0957feec1ad5446685ee4fe206e90f36304ff9c16ef4e40e127a6edf5bfa415c"
+      },
+      "reconcile_required": {
+        "path": "cards-v4/6e66a6c006b066b37f32c47e95d517174c6fd90427426343d06c0d4aa2e4a447.html",
+        "sha256": "6e66a6c006b066b37f32c47e95d517174c6fd90427426343d06c0d4aa2e4a447"
+      },
+      "verified": {
+        "path": "cards-v4/12621585c33b09084d59a9768174fc1b2828085f8e3572e60041cfeee3eedd07.html",
+        "sha256": "12621585c33b09084d59a9768174fc1b2828085f8e3572e60041cfeee3eedd07"
+      }
+    },
+    "lab_cleanup": {
+      "source_file": "work/demo-v4-cleanup.json",
+      "source_sha256": "2cafc2b0e522536423751fc8f919110bacb4a53bb6c6db95cfa55abe02015fea",
+      "cleaned_at_utc": "2026-11-05T20:33:18.682160+00:00",
+      "removed_container_and_private_volumes": true,
+      "removed_dedicated_network": true,
+      "stopped_owned_demo_processes": [
+        184,
+        94144,
+        95544,
+        99997
+      ],
+      "preserved_capture_files": true
+    }
+  }
+}

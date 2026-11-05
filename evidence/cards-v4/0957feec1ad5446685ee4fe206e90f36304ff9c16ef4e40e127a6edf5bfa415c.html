@@ -1,0 +1,36 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<meta http-equiv="Content-Security-Policy" content="default-src 'none'; style-src 'unsafe-inline'; script-src 'unsafe-inline'; connect-src 'none'; img-src 'none'; base-uri 'none'; form-action 'none'"><title>CapRover operation receipt</title><style>
+*{box-sizing:border-box}body{margin:0;font-family:Inter,ui-sans-serif,system-ui,-apple-system,sans-serif;color:#eef5f9;background:transparent}
+.card{max-width:640px;background:#101c25;border:1px solid #31434d;border-radius:18px;overflow:hidden}
+.top{padding:18px 24px;border-bottom:1px solid #2c3e49;display:flex;gap:12px;align-items:center;justify-content:space-between}
+.brand{font-weight:700;font-size:13px;letter-spacing:.02em}.stamp{font-size:10px;font-weight:600;color:#a8bbc6;letter-spacing:.08em;text-transform:uppercase}
+.body{padding:24px}.status{display:inline-block;font-size:14px;line-height:1.4;padding:5px 9px;border-radius:6px;font-weight:650;background:#263d49;color:#d9edf5}
+.warning{color:#ffdd9d;background:#443722}.danger{color:#ffc1bd;background:#492d30}.success{color:#a2eec8;background:#1c4338}
+h1{font-size:29px;letter-spacing:-.04em;line-height:1.15;margin:14px 0 6px;overflow-wrap:anywhere}.target{font-size:12px;color:#a9bdc9;overflow-wrap:anywhere}
+.images{margin:22px 0 18px;padding:15px 16px;border:1px solid #30434e;border-radius:10px;display:grid;gap:15px}
+.label{font-size:10px;text-transform:uppercase;letter-spacing:.09em;color:#93aab7;font-weight:650;margin-bottom:5px}
+code{font-family:ui-monospace,SFMono-Regular,Consolas,monospace;font-size:11px;overflow-wrap:anywhere;user-select:all}.requested{color:#b9edff}
+.facts{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:1px;background:#30434e;border:1px solid #30434e;border-radius:10px;overflow:hidden}
+.fact{padding:13px 12px;background:#13232e}.value{font-size:12px;font-weight:600;line-height:1.45;overflow-wrap:anywhere}.note{color:#a8bcc8;font-size:11px;line-height:1.5}
+.audit{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin:19px 0}.audit .value{font-size:11px}.next{border-left:3px solid #87dbed;background:#192d37;padding:13px 15px;border-radius:0 8px 8px 0;margin-top:18px}
+.next p{font-size:12px;line-height:1.55;margin:5px 0 8px}.next code{font-size:11px;color:#b9edff}.foot{border-top:1px solid #30434e;padding:15px 24px;color:#a4b7c2;font-size:10px;line-height:1.6}
+details{margin-top:16px;color:#bdd0dc;font-size:11px}summary{cursor:pointer;user-select:none}dl{margin:10px 0 0}dt{color:#91aab9;margin-top:10px;font-size:10px}dd{margin:4px 0;line-height:1.6}
+@media(max-width:450px){.body{padding:18px}.top,.foot{padding:15px 18px}.top{align-items:flex-start}.facts{grid-template-columns:1fr}.audit{grid-template-columns:1fr}h1{font-size:25px}}
+</style></head>
+<body><article class="card" aria-label="Historical CapRover operation receipt">
+<header class="top"><span class="brand">CAPROVER OPERATOR</span><span class="stamp">Historical snapshot</span></header>
+<div class="body"><span class="status neutral">Ready for review</span>
+<h1>cyberchef-demo</h1><div class="target">https://127.0.0.1:63159</div>
+<section class="images" aria-label="Planned image change"><div><div class="label">Previous image</div><code>ghcr.io/gchq/cyberchef@sha256:379c6cbcfd8c…</code></div>
+<div><div class="label">Requested image</div><code class="requested">ghcr.io/gchq/cyberchef@sha256:f04a39926344…</code></div></section>
+<section class="facts" aria-label="Recorded evidence"><div class="fact"><div class="label">CapRover metadata</div><div class="value">Not proven</div></div>
+<div class="fact"><div class="label">Runtime</div><div class="value">Exact-image tasks not proven</div><div class="note">? / 1 replicas observed</div></div>
+<div class="fact"><div class="label">HTTP health</div><div class="value">Not proven</div></div></section>
+<section class="audit"><div><div class="label">Native approval</div><div class="value">Required for every apply</div><div class="note">Not separately stored in this receipt</div></div>
+<div><div class="label">Deployment attempt</div><div class="value">No attempt marker recorded</div><div class="note">A marker is not proof of server delivery</div></div></section>
+<div class="label">Evidence observed (UTC)</div><div class="value">Not recorded</div>
+<aside class="next"><div class="label">Next step · manual</div><p>Review the target, image, baseline and expiry. Apply this saved plan only when you intend the deployment; Hermes will require a fresh native human approval.</p><code>caprover_apply</code></aside>
+<details><summary>Plan details &amp; full image references</summary><dl><dt>Plan ID</dt><dd><code>55c6b3ca1423437e8b324f690ba806d1</code></dd><dt>Intent hash</dt><dd><code>33d6def1e3f895235afa922099c6fa3279bb0cd3859f8141328c055811531b05</code></dd><dt>Created (UTC)</dt><dd><code>2026-11-05T20:15:42Z</code></dd><dt>Plan expires (UTC)</dt><dd><code>2026-11-05T21:15:42Z</code></dd><dt>Previous image · select to copy</dt><dd><code>ghcr.io/gchq/cyberchef@sha256:379c6cbcfd8cc10b8e045548f3ebaa82ce429e4b40cf60e4532e116a4c67884d</code></dd><dt>Requested image · select to copy</dt><dd><code>ghcr.io/gchq/cyberchef@sha256:f04a39926344faf8e4cbbc8c92fb125d2b466f9be62db09aff23c7c406101a51</code></dd><dt>Attempt marker (UTC)</dt><dd><code>Not recorded</code></dd></dl></details></div>
+<footer class="foot">Saved evidence, not live availability. This card cannot approve, deploy, retry or roll back. Metadata and HTTP alone do not prove the serving image.</footer>
+</article></body></html>

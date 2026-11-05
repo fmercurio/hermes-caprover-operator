@@ -148,6 +148,16 @@ class HermesAdapterTests(unittest.TestCase):
         self.assertEqual(set(ctx.hooks), {"pre_tool_call", "post_approval_response"})
         self.assertEqual(set(ctx.middleware), {"tool_execution"})
 
+    def test_card_failure_cannot_mask_an_authorized_apply_receipt(self):
+        presentation = importlib.import_module(ROOT.name + ".caprover_operator.presentation")
+        self.approve()
+        with patch.object(presentation, "present", side_effect=RuntimeError("display failed")):
+            result = json.loads(self.execute())
+        self.assertEqual(result["status"], "reconcile_required")
+        self.assertEqual(self.operator.writes, 1)
+        self.assertEqual(self.operator.apply_calls, 1)
+        self.assertEqual(result["guidance"]["next_step"]["tool"], "caprover_status")
+
     def test_model_cannot_supply_approval_or_choose_server_and_app(self):
         for extra in ({"approved": True}, {"url": "https://other.example.test"}, {"app": "other"}):
             with self.subTest(extra=extra):
