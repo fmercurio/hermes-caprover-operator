@@ -1,0 +1,24 @@
+CapRover Operator
+Copyright (c) 2026 Felippe Mercurio
+License: MIT (see LICENSE)
+
+Source and design provenance
+----------------------------
+This package develops the bounded preflight, source/baseline checks and
+uncertain-outcome discipline from the author's public CapRover skills:
+
+  https://github.com/fmercurio/clawdia-custom-skills
+  Revision: f286115d051b811d98f7f33b20200a8f3338d07c
+  Paths: skills/devops/caprover-deploy and skills/devops/caprover-operations
+
+Source license: MIT
+Original copyright notice retained verbatim:
+  Copyright (c) 2026 Felippe M. and contributors
+
+The source repository's MIT permission and warranty notice is reproduced in
+LICENSE. The native Hermes integration and the independent ledger/client in
+this package do not bundle the broader skill's CLI/browser/credential-file
+fallbacks or its app/configuration mutation interfaces.
+
+Hermes Agent and CapRover are independent projects. Their names identify the
+supported integration targets and do not imply sponsorship or endorsement.

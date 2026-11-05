@@ -1,0 +1,43 @@
+name: caprover-operator
+label: CapRover Operator
+version: "0.1.0"
+description: State-bound deployment plans, human approval, durable uncertainty and observation receipts for one CapRover app.
+author: Felippe Mercurio
+license: MIT
+requires_hermes: ">=0.22.6"
+platforms: [linux, macos]
+provides_tools:
+  - caprover_plan
+  - caprover_apply
+  - caprover_reconcile
+  - caprover_status
+provides_hooks:
+  - pre_tool_call
+  - post_approval_response
+provides_middleware:
+  - tool_execution
+requires_env:
+  - name: CAPROVER_OPERATOR_TOKEN
+    description: CapRover API authentication token for the configured server, stored through Hermes credentials.
+    secret: true
+config_schema:
+  url:
+    type: str
+    default: ""
+    label: CapRover URL
+    description: HTTPS origin of the one CapRover server this profile may operate.
+  app_name:
+    type: str
+    default: ""
+    label: App name
+    description: Existing app authorized by the owner. Tool calls cannot choose another app.
+  health_url:
+    type: str
+    default: ""
+    label: Health URL
+    description: Optional fixed HTTPS health endpoint. HTTP evidence is reported separately from deployment metadata and does not prove the serving image.
+  plan_ttl_seconds:
+    type: int
+    default: 300
+    label: Plan lifetime
+    description: Plan validity in seconds, from 30 to 3600. Human approval does not extend it.

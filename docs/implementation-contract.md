@@ -1,0 +1,51 @@
+# CapRover Operator implementation contract
+
+MVP: one owner-configured CapRover origin and existing app per Hermes profile. Only image deployment, only immutable OCI sha256 references. No arbitrary shell, app creation/deletion, config mutation, migration, automatic rollback, credential-file reads, or production demo. A plan is a private persisted intent bound to the observed app state. After consuming it, at most one POST attempt is made by this plugin; uncertain outcomes require observation. This is not distributed exactly-once or remote compare-and-swap.
+
+## Shared Python interfaces
+
+Package `caprover_operator` uses the Python standard library. Python >=3.11. All public results are JSON-serializable dictionaries. Do not import Hermes from the engine/client.
+
+### client.py (HTTP agent)
+
+`CapRoverClient(base_url, token_provider, fingerprint_key, *, allowed_apps, health_urls=None, timeout=10.0, allow_insecure_local=False)`
+
+- `target`: canonical HTTPS origin. HTTP permitted ONLY for explicit loopback lab mode. Never follow redirects with auth or health requests.
+- `snapshot(app) -> dict`: validates the configured app; reads the CapRover definition/status using actual API v2 schemas. Returns `app` string, `version` nonnegative int, `image` string or null from the exact matching deployedVersion history entry, `replicas` requested int, `is_building` bool, `config_fingerprint` HMAC-SHA256 string. An optional `running_replicas` is actual observed int or null; do not infer running tasks from requested replicas. Optional read-only runtime evidence from `/api/v2/user/apps/runtime/<app>` is `runtime: {available: bool, desired_instances: int|null, running_instances: int|null, current_tasks: [{slot: int, image: str, state: str, desired_state: str}]}`. Unsupported/unavailable/malformed runtime evidence is not a fabricated task count or image proof. Fingerprint complete relevant app definition with secret values handled only in memory, never returned or stored verbatim.
+- `deploy_image(app, image) -> dict`: exactly one HTTP POST attempt (no automatic refresh/retry/redirect). Native CapRover image deployment via Captain Definition. Raises `ClientError` on failure. A Captain success response means accepted, not healthy/deployed.
+- `health(app) -> dict`: owner-configured fixed URL only, bounded GET, no redirects; returns `configured` bool, `ok` bool or null, `status_code` int or null, and a bounded generic reason; never response body. No URL from model arguments.
+- Export `ClientError` with generic sanitized messages. Bound response size/time, validate shapes, no exception containing token/password/raw response. App allowlist mandatory; URL origin never comes from a tool call.
+
+### engine.py (core agent)
+
+- `load_fingerprint_key(data_dir: Path) -> bytes`: private persistent random key (0600), atomically created, refusing symlink/unsafe data directory. It is internal integrity state, not an external service credential.
+- `Operator(data_dir: Path, client, *, clock=None)` with methods:
+  - `plan(app: str, image: str, ttl_seconds: int = 300) -> dict`
+  - `get_plan(plan_id: str) -> dict` (local read only, no network; used for approval summary)
+  - `apply(plan_id: str, authorize: Callable[[dict], bool]) -> dict`
+  - `reconcile(plan_id: str) -> dict`
+  - `status(plan_id: str | None = None, limit: int = 20) -> dict`
+  - `close()`
+- Export `OperatorError` for safe expected failures; stable `code` attribute plus safe string.
+- Store SQLite ledger under the private data directory. Public plan keys: `plan_id`, `plan_hash`, `target`, `app`, `image`, `baseline`, `created_at`, `expires_at`, `status`. Receipts add requested/observed/checks/timestamps without raw app definitions or credentials.
+- Baseline fingerprint is bound into a stable canonical plan hash. Reject building apps, unknown identity/state, invalid/mutable image references, stale plans and no-op desired images before writes.
+- Apply validates authorization using the TRUSTED callback supplied by integration, never a model-supplied approved flag. After approval atomically consume/claim the plan and per-target/app slot in SQLite BEFORE any possible POST. Re-read remote state after approval; drift or unavailable preflight yields a consumed no-write result. Only matching state proceeds to one `deploy_image` call.
+- Any failure after possible trigger persists `reconcile_required`. Persist `sending` before invoking transport so process death remains blocked on reopen. Never reset uncertain state to planned and never transparently retry POST.
+- Reconciliation is observation only. Require generation strictly newer than baseline and exact desired image to report `deployment_recorded` in CapRover metadata. Separate API metadata evidence, configured replica count, actual replica evidence if available, and HTTP health. Configured positive HTTP 2xx evidence without runtime image proof yields `metadata_http_observed`; absent or unproven HTTP health remains `deployment_recorded`. Failed HTTP health or an explicitly observed replica contradiction may yield `observed_unhealthy`. CapRover can advance metadata and queue a deployment before tasks converge, so HTTP 200 may still come from the previous image.
+- Optional runtime rollout proof requires available well-formed runtime evidence: desired instances equal the configured positive replica count, running instances at least that count, exactly one current task in every slot `1..desired`, every task state and desired state `running`, and every task image carrying the exact desired repository and immutable digest (a tag beside the digest is ignored for identity). Duplicate/missing slots, old/mixed/mutable task images, malformed evidence or unavailable endpoints cannot prove rollout. Receipt checks always state `runtime_rollout_proven`; only this proof plus newer exact-image metadata, no build in progress and configured positive HTTP 2xx evidence yields `verified`. This is dated CapRover task-API evidence, not continuous monitoring or distributed exactly-once.
+- Before an operation has been recorded, unchanged/contradictory/insufficient metadata observations remain `reconcile_required` and keep the durable claim. An exact newer metadata handoff can release that slot without runtime convergence. Metadata-only or unhealthy receipts can be re-observed only by an explicit `reconcile` call, never automatic polling; `status` remains a local historical read. Keep the first metadata evidence and at most eight flat observation summaries. A later different-image generation after a known recorded operation becomes terminal `superseded`, with no runtime rollout proof and no new claim; never release another plan's claim. Verified receipts remain dated historical receipts when read/reconciled.
+- Transaction/locking must protect concurrent apply and operation claim. No automatic rollback. Terminal receipts are historical, with observed_at, not continuous monitoring claims.
+
+### Hermes adapter (integration agent)
+
+Root plugin `__init__.py` and `plugin.yaml`. Tools `caprover_plan` (image only), `caprover_apply` (plan_id), `caprover_reconcile` (plan_id), `caprover_status` (optional plan_id). Owner settings `url`, `app_name`, `health_url` (optional), `plan_ttl_seconds` (300); no model-controlled server/app/health URL.
+
+Read API token via `agent.secret_scope.get_secret('CAPROVER_OPERATOR_TOKEN')` lazily; data directory via public plugin storage. Root entrypoint import/register must be side-effect free.
+
+Use public pre_tool_call approval directive with unique plan-specific rule_key. Post-approval response creates a bounded per-call trusted ticket only after an actual human choice once/session/always (reject smart/auxiliary/model decisions). Public tool_execution middleware binds/consumes that ticket in a ContextVar during handler execution. Missing hooks/middleware/IDs/receipt => apply refuses. Native approval denies/timeouts must not consume a POST. No `approved` argument or global auto-approval. Core `authorize` callable verifies this internal permit against plan hash. Fail closed if target/app/config changed between approval and handler.
+
+CLI initial scope: read-only status/receipt and an explicitly labeled disposable protocol demo. No live `--approve` shortcut. Root owns CLI/docs/demo/packaging; integration agent owns root __init__.py, plugin.yaml and tests/test_hermes_adapter.py. Core agent owns engine.py and tests/test_engine.py. HTTP agent owns client.py, tests/test_client.py and a reusable local HTTP fixture under tests/fake_caprover.py. Coordinate any needed interface change before editing others' files.
+
+## Required behavioral evidence
+
+Changed baseline prevents POST; expired/denied plan prevents POST; two concurrent applies produce at most one POST attempt; timeout/lost ACK persists uncertainty across new Operator instance; retry does not POST; reconciliation observes expected image+new version; insufficient evidence does not claim success; secrets never appear in receipts/errors; production origins cannot use insecure HTTP; no redirect retry; approvals cannot be forged by model arguments; native plugin validation passes. Demo must identify a protocol fixture as a fixture unless additionally validated on a real disposable CapRover.
