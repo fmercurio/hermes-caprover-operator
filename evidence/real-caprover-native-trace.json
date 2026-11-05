@@ -1,0 +1,563 @@
+{
+  "backend_acknowledgements": [
+    {
+      "captain_status": 100,
+      "http_status": 200
+    }
+  ],
+  "caprover_version": "1.16.0",
+  "demo_kind": "native_hermes_real_disposable_caprover",
+  "events": [
+    {
+      "default_client_unchanged": true,
+      "event": "native_plan",
+      "fresh_hermes_process": true,
+      "host_approvals": [],
+      "index": 1,
+      "native_dispatch": true,
+      "post_attempts": 0,
+      "public_result": {
+        "app": "operator-demo",
+        "baseline": {
+          "app": "operator-demo",
+          "config_fingerprint": "fa04099a1a1c7d7e0fc1d54ac5c6e3055d021b538b29a4fe59bec77088333c35",
+          "image": "nginx@sha256:a8b39bd9cf0f83869a2162827a0caf6137ddf759d50a171451b335cecc87d236",
+          "is_building": false,
+          "replicas": 1,
+          "running_replicas": 1,
+          "runtime": {
+            "available": true,
+            "current_tasks": [
+              {
+                "desired_state": "running",
+                "image": "nginx@sha256:a8b39bd9cf0f83869a2162827a0caf6137ddf759d50a171451b335cecc87d236",
+                "slot": 1,
+                "state": "running"
+              }
+            ],
+            "desired_instances": 1,
+            "running_instances": 1
+          },
+          "version": 1
+        },
+        "created_at": 1793899761.1228092,
+        "expires_at": 1793903361.1228092,
+        "image": "nginx@sha256:5616878291a2eed594aee8db4dade5878cf7edcb475e59193904b198d9b830de",
+        "plan_hash": "23897c05fe108a08205ce88160ceb350ec69e8558828f13faa928b42fc496f9d",
+        "plan_id": "19f22612b40b425780b1392be2119a71",
+        "status": "planned",
+        "target": "https://127.0.0.1:64664"
+      },
+      "tool_arguments": {
+        "image": "nginx@sha256:5616878291a2eed594aee8db4dade5878cf7edcb475e59193904b198d9b830de"
+      },
+      "tool_name": "caprover_plan"
+    },
+    {
+      "default_client_unchanged": true,
+      "event": "real_deploy_lost_ack",
+      "fresh_hermes_process": true,
+      "host_approvals": [
+        {
+          "choice": "once",
+          "command": "<caprover_apply> (plugin approval rule)",
+          "decision_kind": "SIMULATED LAB HUMAN APPROVAL",
+          "message": "Apply plan 19f22612b40b425780b1392be2119a71 to operator-demo at https://127.0.0.1:64664: deploy nginx@sha256:5616878291a2eed594aee8db4dade5878cf7edcb475e59193904b198d9b830de. Baseline generation 1, requested replicas 1. This permits one deployment attempt. A lost reply requires reconciliation. Image deployment does not restore environment variables, volumes or databases.",
+          "surface": "native_cli"
+        }
+      ],
+      "index": 2,
+      "native_dispatch": true,
+      "post_attempts": 1,
+      "public_result": {
+        "app": "operator-demo",
+        "attempted_at": 1793899761.745654,
+        "baseline": {
+          "app": "operator-demo",
+          "config_fingerprint": "fa04099a1a1c7d7e0fc1d54ac5c6e3055d021b538b29a4fe59bec77088333c35",
+          "image": "nginx@sha256:a8b39bd9cf0f83869a2162827a0caf6137ddf759d50a171451b335cecc87d236",
+          "is_building": false,
+          "replicas": 1,
+          "running_replicas": 1,
+          "runtime": {
+            "available": true,
+            "current_tasks": [
+              {
+                "desired_state": "running",
+                "image": "nginx@sha256:a8b39bd9cf0f83869a2162827a0caf6137ddf759d50a171451b335cecc87d236",
+                "slot": 1,
+                "state": "running"
+              }
+            ],
+            "desired_instances": 1,
+            "running_instances": 1
+          },
+          "version": 1
+        },
+        "checks": {
+          "post_attempted": true,
+          "preflight": "matched",
+          "runtime_rollout_proven": false
+        },
+        "consumed_at": 1793899761.721302,
+        "created_at": 1793899761.1228092,
+        "expires_at": 1793903361.1228092,
+        "image": "nginx@sha256:5616878291a2eed594aee8db4dade5878cf7edcb475e59193904b198d9b830de",
+        "plan_hash": "23897c05fe108a08205ce88160ceb350ec69e8558828f13faa928b42fc496f9d",
+        "plan_id": "19f22612b40b425780b1392be2119a71",
+        "requested": {
+          "image": "nginx@sha256:5616878291a2eed594aee8db4dade5878cf7edcb475e59193904b198d9b830de"
+        },
+        "status": "reconcile_required",
+        "target": "https://127.0.0.1:64664",
+        "trigger_outcome": "uncertain"
+      },
+      "tool_arguments": {
+        "plan_id": "19f22612b40b425780b1392be2119a71"
+      },
+      "tool_name": "caprover_apply"
+    },
+    {
+      "acknowledgements": [
+        {
+          "captain_status": 100,
+          "http_status": 200
+        }
+      ],
+      "event": "real_backend_acknowledged_before_connection_drop",
+      "index": 3,
+      "post_attempts": 1
+    },
+    {
+      "default_client_unchanged": true,
+      "event": "new_process_replay_refused",
+      "fresh_hermes_process": true,
+      "host_approvals": [],
+      "index": 4,
+      "native_dispatch": true,
+      "post_attempts": 1,
+      "public_result": {
+        "error": "{\"error\": {\"code\": \"plan_not_applicable\", \"message\": \"The plan is not pending or does not match the configured CapRover app.\"}}"
+      },
+      "tool_arguments": {
+        "plan_id": "19f22612b40b425780b1392be2119a71"
+      },
+      "tool_name": "caprover_apply"
+    },
+    {
+      "default_client_unchanged": true,
+      "event": "real_runtime_observation",
+      "fresh_hermes_process": true,
+      "host_approvals": [],
+      "index": 5,
+      "native_dispatch": true,
+      "post_attempts": 1,
+      "public_result": {
+        "app": "operator-demo",
+        "attempted_at": 1793899761.745654,
+        "baseline": {
+          "app": "operator-demo",
+          "config_fingerprint": "fa04099a1a1c7d7e0fc1d54ac5c6e3055d021b538b29a4fe59bec77088333c35",
+          "image": "nginx@sha256:a8b39bd9cf0f83869a2162827a0caf6137ddf759d50a171451b335cecc87d236",
+          "is_building": false,
+          "replicas": 1,
+          "running_replicas": 1,
+          "runtime": {
+            "available": true,
+            "current_tasks": [
+              {
+                "desired_state": "running",
+                "image": "nginx@sha256:a8b39bd9cf0f83869a2162827a0caf6137ddf759d50a171451b335cecc87d236",
+                "slot": 1,
+                "state": "running"
+              }
+            ],
+            "desired_instances": 1,
+            "running_instances": 1
+          },
+          "version": 1
+        },
+        "checks": {
+          "configured_replicas": 1,
+          "deployment_recorded": true,
+          "exact_image": true,
+          "http_health": {
+            "configured": true,
+            "ok": true,
+            "reason": "health_passed",
+            "status_code": 200
+          },
+          "newer_version": true,
+          "not_building": true,
+          "replica_evidence": "observed",
+          "running_replicas": 1,
+          "runtime_rollout_proven": false
+        },
+        "consumed_at": 1793899761.721302,
+        "created_at": 1793899761.1228092,
+        "expires_at": 1793903361.1228092,
+        "first_metadata_observed": {
+          "image": "nginx@sha256:5616878291a2eed594aee8db4dade5878cf7edcb475e59193904b198d9b830de",
+          "observed_at": 1793899766.5410812,
+          "version": 2
+        },
+        "image": "nginx@sha256:5616878291a2eed594aee8db4dade5878cf7edcb475e59193904b198d9b830de",
+        "observation": "available",
+        "observation_history": [
+          {
+            "checks": {
+              "configured_replicas": 1,
+              "deployment_recorded": true,
+              "exact_image": true,
+              "http_health": {
+                "configured": true,
+                "ok": true,
+                "reason": "health_passed",
+                "status_code": 200
+              },
+              "newer_version": true,
+              "not_building": true,
+              "replica_evidence": "observed",
+              "running_replicas": 1,
+              "runtime_rollout_proven": false
+            },
+            "image": "nginx@sha256:5616878291a2eed594aee8db4dade5878cf7edcb475e59193904b198d9b830de",
+            "observation": "available",
+            "observed_at": 1793899766.5410812,
+            "status": "metadata_http_observed",
+            "version": 2
+          }
+        ],
+        "observed": {
+          "app": "operator-demo",
+          "config_fingerprint": "cba5f118ce985dd3535102cbade8e8e69e24d40cf1b98cca507de8dbee608ace",
+          "image": "nginx@sha256:5616878291a2eed594aee8db4dade5878cf7edcb475e59193904b198d9b830de",
+          "is_building": false,
+          "replicas": 1,
+          "running_replicas": 1,
+          "runtime": {
+            "available": true,
+            "current_tasks": [
+              {
+                "desired_state": "running",
+                "image": "nginx@sha256:5616878291a2eed594aee8db4dade5878cf7edcb475e59193904b198d9b830de",
+                "slot": 1,
+                "state": "running"
+              },
+              {
+                "desired_state": "shutdown",
+                "image": "nginx@sha256:a8b39bd9cf0f83869a2162827a0caf6137ddf759d50a171451b335cecc87d236",
+                "slot": 1,
+                "state": "running"
+              }
+            ],
+            "desired_instances": 1,
+            "running_instances": 1
+          },
+          "version": 2
+        },
+        "observed_at": 1793899766.5410812,
+        "plan_hash": "23897c05fe108a08205ce88160ceb350ec69e8558828f13faa928b42fc496f9d",
+        "plan_id": "19f22612b40b425780b1392be2119a71",
+        "requested": {
+          "image": "nginx@sha256:5616878291a2eed594aee8db4dade5878cf7edcb475e59193904b198d9b830de"
+        },
+        "status": "metadata_http_observed",
+        "target": "https://127.0.0.1:64664",
+        "trigger_outcome": "uncertain"
+      },
+      "tool_arguments": {
+        "plan_id": "19f22612b40b425780b1392be2119a71"
+      },
+      "tool_name": "caprover_reconcile"
+    },
+    {
+      "default_client_unchanged": true,
+      "event": "real_runtime_observation",
+      "fresh_hermes_process": true,
+      "host_approvals": [],
+      "index": 6,
+      "native_dispatch": true,
+      "post_attempts": 1,
+      "public_result": {
+        "app": "operator-demo",
+        "attempted_at": 1793899761.745654,
+        "baseline": {
+          "app": "operator-demo",
+          "config_fingerprint": "fa04099a1a1c7d7e0fc1d54ac5c6e3055d021b538b29a4fe59bec77088333c35",
+          "image": "nginx@sha256:a8b39bd9cf0f83869a2162827a0caf6137ddf759d50a171451b335cecc87d236",
+          "is_building": false,
+          "replicas": 1,
+          "running_replicas": 1,
+          "runtime": {
+            "available": true,
+            "current_tasks": [
+              {
+                "desired_state": "running",
+                "image": "nginx@sha256:a8b39bd9cf0f83869a2162827a0caf6137ddf759d50a171451b335cecc87d236",
+                "slot": 1,
+                "state": "running"
+              }
+            ],
+            "desired_instances": 1,
+            "running_instances": 1
+          },
+          "version": 1
+        },
+        "checks": {
+          "configured_replicas": 1,
+          "deployment_recorded": true,
+          "exact_image": true,
+          "http_health": {
+            "configured": true,
+            "ok": true,
+            "reason": "health_passed",
+            "status_code": 200
+          },
+          "newer_version": true,
+          "not_building": true,
+          "replica_evidence": "observed",
+          "running_replicas": 1,
+          "runtime_rollout_proven": true
+        },
+        "consumed_at": 1793899761.721302,
+        "created_at": 1793899761.1228092,
+        "expires_at": 1793903361.1228092,
+        "first_metadata_observed": {
+          "image": "nginx@sha256:5616878291a2eed594aee8db4dade5878cf7edcb475e59193904b198d9b830de",
+          "observed_at": 1793899766.5410812,
+          "version": 2
+        },
+        "image": "nginx@sha256:5616878291a2eed594aee8db4dade5878cf7edcb475e59193904b198d9b830de",
+        "observation": "available",
+        "observation_history": [
+          {
+            "checks": {
+              "configured_replicas": 1,
+              "deployment_recorded": true,
+              "exact_image": true,
+              "http_health": {
+                "configured": true,
+                "ok": true,
+                "reason": "health_passed",
+                "status_code": 200
+              },
+              "newer_version": true,
+              "not_building": true,
+              "replica_evidence": "observed",
+              "running_replicas": 1,
+              "runtime_rollout_proven": false
+            },
+            "image": "nginx@sha256:5616878291a2eed594aee8db4dade5878cf7edcb475e59193904b198d9b830de",
+            "observation": "available",
+            "observed_at": 1793899766.5410812,
+            "status": "metadata_http_observed",
+            "version": 2
+          },
+          {
+            "checks": {
+              "configured_replicas": 1,
+              "deployment_recorded": true,
+              "exact_image": true,
+              "http_health": {
+                "configured": true,
+                "ok": true,
+                "reason": "health_passed",
+                "status_code": 200
+              },
+              "newer_version": true,
+              "not_building": true,
+              "replica_evidence": "observed",
+              "running_replicas": 1,
+              "runtime_rollout_proven": true
+            },
+            "image": "nginx@sha256:5616878291a2eed594aee8db4dade5878cf7edcb475e59193904b198d9b830de",
+            "observation": "available",
+            "observed_at": 1793899768.218305,
+            "status": "verified",
+            "version": 2
+          }
+        ],
+        "observed": {
+          "app": "operator-demo",
+          "config_fingerprint": "cba5f118ce985dd3535102cbade8e8e69e24d40cf1b98cca507de8dbee608ace",
+          "image": "nginx@sha256:5616878291a2eed594aee8db4dade5878cf7edcb475e59193904b198d9b830de",
+          "is_building": false,
+          "replicas": 1,
+          "running_replicas": 1,
+          "runtime": {
+            "available": true,
+            "current_tasks": [
+              {
+                "desired_state": "running",
+                "image": "nginx@sha256:5616878291a2eed594aee8db4dade5878cf7edcb475e59193904b198d9b830de",
+                "slot": 1,
+                "state": "running"
+              }
+            ],
+            "desired_instances": 1,
+            "running_instances": 1
+          },
+          "version": 2
+        },
+        "observed_at": 1793899768.218305,
+        "plan_hash": "23897c05fe108a08205ce88160ceb350ec69e8558828f13faa928b42fc496f9d",
+        "plan_id": "19f22612b40b425780b1392be2119a71",
+        "requested": {
+          "image": "nginx@sha256:5616878291a2eed594aee8db4dade5878cf7edcb475e59193904b198d9b830de"
+        },
+        "status": "verified",
+        "target": "https://127.0.0.1:64664",
+        "trigger_outcome": "uncertain"
+      },
+      "tool_arguments": {
+        "plan_id": "19f22612b40b425780b1392be2119a71"
+      },
+      "tool_name": "caprover_reconcile"
+    }
+  ],
+  "generated_at": "2026-11-05T17:29:28.284259+00:00",
+  "post_attempts": 1,
+  "real_caprover": true,
+  "result": {
+    "app": "operator-demo",
+    "attempted_at": 1793899761.745654,
+    "baseline": {
+      "app": "operator-demo",
+      "config_fingerprint": "fa04099a1a1c7d7e0fc1d54ac5c6e3055d021b538b29a4fe59bec77088333c35",
+      "image": "nginx@sha256:a8b39bd9cf0f83869a2162827a0caf6137ddf759d50a171451b335cecc87d236",
+      "is_building": false,
+      "replicas": 1,
+      "running_replicas": 1,
+      "runtime": {
+        "available": true,
+        "current_tasks": [
+          {
+            "desired_state": "running",
+            "image": "nginx@sha256:a8b39bd9cf0f83869a2162827a0caf6137ddf759d50a171451b335cecc87d236",
+            "slot": 1,
+            "state": "running"
+          }
+        ],
+        "desired_instances": 1,
+        "running_instances": 1
+      },
+      "version": 1
+    },
+    "checks": {
+      "configured_replicas": 1,
+      "deployment_recorded": true,
+      "exact_image": true,
+      "http_health": {
+        "configured": true,
+        "ok": true,
+        "reason": "health_passed",
+        "status_code": 200
+      },
+      "newer_version": true,
+      "not_building": true,
+      "replica_evidence": "observed",
+      "running_replicas": 1,
+      "runtime_rollout_proven": true
+    },
+    "consumed_at": 1793899761.721302,
+    "created_at": 1793899761.1228092,
+    "expires_at": 1793903361.1228092,
+    "first_metadata_observed": {
+      "image": "nginx@sha256:5616878291a2eed594aee8db4dade5878cf7edcb475e59193904b198d9b830de",
+      "observed_at": 1793899766.5410812,
+      "version": 2
+    },
+    "image": "nginx@sha256:5616878291a2eed594aee8db4dade5878cf7edcb475e59193904b198d9b830de",
+    "observation": "available",
+    "observation_history": [
+      {
+        "checks": {
+          "configured_replicas": 1,
+          "deployment_recorded": true,
+          "exact_image": true,
+          "http_health": {
+            "configured": true,
+            "ok": true,
+            "reason": "health_passed",
+            "status_code": 200
+          },
+          "newer_version": true,
+          "not_building": true,
+          "replica_evidence": "observed",
+          "running_replicas": 1,
+          "runtime_rollout_proven": false
+        },
+        "image": "nginx@sha256:5616878291a2eed594aee8db4dade5878cf7edcb475e59193904b198d9b830de",
+        "observation": "available",
+        "observed_at": 1793899766.5410812,
+        "status": "metadata_http_observed",
+        "version": 2
+      },
+      {
+        "checks": {
+          "configured_replicas": 1,
+          "deployment_recorded": true,
+          "exact_image": true,
+          "http_health": {
+            "configured": true,
+            "ok": true,
+            "reason": "health_passed",
+            "status_code": 200
+          },
+          "newer_version": true,
+          "not_building": true,
+          "replica_evidence": "observed",
+          "running_replicas": 1,
+          "runtime_rollout_proven": true
+        },
+        "image": "nginx@sha256:5616878291a2eed594aee8db4dade5878cf7edcb475e59193904b198d9b830de",
+        "observation": "available",
+        "observed_at": 1793899768.218305,
+        "status": "verified",
+        "version": 2
+      }
+    ],
+    "observed": {
+      "app": "operator-demo",
+      "config_fingerprint": "cba5f118ce985dd3535102cbade8e8e69e24d40cf1b98cca507de8dbee608ace",
+      "image": "nginx@sha256:5616878291a2eed594aee8db4dade5878cf7edcb475e59193904b198d9b830de",
+      "is_building": false,
+      "replicas": 1,
+      "running_replicas": 1,
+      "runtime": {
+        "available": true,
+        "current_tasks": [
+          {
+            "desired_state": "running",
+            "image": "nginx@sha256:5616878291a2eed594aee8db4dade5878cf7edcb475e59193904b198d9b830de",
+            "slot": 1,
+            "state": "running"
+          }
+        ],
+        "desired_instances": 1,
+        "running_instances": 1
+      },
+      "version": 2
+    },
+    "observed_at": 1793899768.218305,
+    "plan_hash": "23897c05fe108a08205ce88160ceb350ec69e8558828f13faa928b42fc496f9d",
+    "plan_id": "19f22612b40b425780b1392be2119a71",
+    "requested": {
+      "image": "nginx@sha256:5616878291a2eed594aee8db4dade5878cf7edcb475e59193904b198d9b830de"
+    },
+    "status": "verified",
+    "target": "https://127.0.0.1:64664",
+    "trigger_outcome": "uncertain"
+  },
+  "scope": {
+    "app": "operator-demo",
+    "baseline_image": "nginx@sha256:a8b39bd9cf0f83869a2162827a0caf6137ddf759d50a171451b335cecc87d236",
+    "default_engine_and_client_unchanged": true,
+    "desired_image": "nginx@sha256:5616878291a2eed594aee8db4dade5878cf7edcb475e59193904b198d9b830de",
+    "human_approval": "SIMULATED LAB HOST CALLBACK",
+    "native_dispatch": true,
+    "production_traffic": false,
+    "tls": "temporary lab CA trusted by child SSL_CERT_FILE only"
+  }
+}

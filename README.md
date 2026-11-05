@@ -2,7 +2,7 @@
 
 A native Hermes plugin for human-approved image deployments with a durable record of uncertain outcomes. A saved plan binds one immutable image to the observed state of one owner-configured CapRover app. If the connection disappears after a deployment request, the next step is reconciliation: the plugin keeps the operation blocked and observes the server before another operation can proceed.
 
-This is a development release. Catalog submission and acceptance are separate from publishing this repository. The automated integration demo uses a disposable HTTP protocol fixture; it does not run CapRover, Docker or the requested image.
+This is a development release. Catalog submission and acceptance are separate from publishing this repository. The [protocol and native integration demos](#local-development-and-protocol-demo) use a synthetic API. A separate [real CapRover 1.16.0 validation](docs/real-lab-validation.md), recorded on November 5, 2026, exercised native Hermes dispatch, one real image deployment, a lost acknowledgement, process restart and task convergence in an explicitly authorized disposable lab. Its host human-approval response was simulated and is labeled in the [sanitized trace](evidence/real-caprover-native-trace.json).
 
 ## Workflow
 
