@@ -1,12 +1,13 @@
 name: caprover-operator
 label: CapRover Operator
-version: "0.1.0"
+version: "0.2.0"
 description: State-bound deployment plans, human approval, durable uncertainty and observation receipts for one CapRover app.
 author: Felippe Mercurio
 license: MIT
 requires_hermes: ">=0.22.6"
 platforms: [linux, macos]
 provides_tools:
+  - caprover_doctor
   - caprover_plan
   - caprover_apply
   - caprover_reconcile

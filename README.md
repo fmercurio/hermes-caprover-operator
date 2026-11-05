@@ -1,8 +1,24 @@
 # CapRover Operator
 
-A native Hermes plugin for human-approved image deployments with a durable record of uncertain outcomes. A saved plan binds one immutable image to the observed state of one owner-configured CapRover app. If the connection disappears after a deployment request, the next step is reconciliation: the plugin keeps the operation blocked and observes the server before another operation can proceed.
+Small teams running open-source services on their own infrastructure need manageable deployments, so server administration does not become a second job. CapRover Operator brings one focused workflow into Hermes: deploy an immutable image to one owner-configured CapRover app through a saved plan and native human approval. If CapRover accepts the request just before the connection disappears, the plugin preserves uncertainty across restarts, blocks another deployment attempt for the same plan and uses read-only reconciliation to establish what was observed.
 
-This is a development release. Catalog submission and acceptance are separate from publishing this repository. The [protocol and native integration demos](#local-development-and-protocol-demo) use a synthetic API. A separate [real CapRover 1.16.0 validation](docs/real-lab-validation.md), recorded on November 5, 2026, exercised native Hermes dispatch, one real image deployment, a lost acknowledgement, process restart and task convergence in an explicitly authorized disposable lab. Its host human-approval response was simulated and is labeled in the [sanitized trace](evidence/real-caprover-native-trace.json).
+This is a development release; catalog acceptance is a separate step. A [recorded real CLI validation](docs/real-cli-validation.md) used Hermes' native CLI, a live model and CapRover 1.16.0: two CLI processes, one deployment POST, a lost acknowledgement, replay refusal and read-only reconciliation to verified task/HTTP evidence. User-authorized lab automation operated the actual native approval UI; this run used no synthetic approval callback or manual human keypress. Its [sanitized trace](evidence/real-hermes-cli-trace.json) records source hashes matching this 0.2.0 implementation.
+
+The [protocol demos](#local-development-and-protocol-demo) use a synthetic API. The earlier [real CapRover dispatcher validation](docs/real-lab-validation.md) used a simulated host approval callback and separately captured metadata/HTTP appearing before runtime convergence. These evidence types are labeled individually.
+
+## Why self-hosted
+
+Autonomy becomes sustainable when a small team can reliably operate what it owns. Choosing where services run is valuable; so is understanding a deployment decision, reviewing it before execution and knowing what to do when a connection disappears. This plugin is designed to make that work accessible from an existing Hermes conversation through a focused, inspectable workflow.
+
+[Hermes](https://github.com/NousResearch/hermes-agent/blob/main/LICENSE) and this plugin are MIT-licensed. Their source can be inspected and adapted to a team's needs. The documented [Hermes plugin interfaces](https://hermes-agent.nousresearch.com/docs/developer-guide/plugins) let the integration use host-owned credentials, native approval and durable plugin storage. An open license alone does not establish operational safety; the checks, failure behavior and evidence matter.
+
+## Why CapRover
+
+[CapRover](https://caprover.com/) is a self-hosted deployment platform for infrastructure its operator controls. It [manages Docker Swarm services](https://caprover.com/docs/fundamentals/how-caprover-works) and [accepts existing container images](https://caprover.com/docs/deployments#deploy-a-docker-image). That gives this release a concrete starting point: one existing app, one immutable image and observable deployment state. Moving stateful services still requires work on data, networking and recovery; a container image does not make those concerns disappear.
+
+CapRover publishes its source under [Apache 2.0 with a project-specific appendix](https://github.com/caprover/caprover/blob/master/LICENSE), including additional conditions concerning paid features and redistribution. Review the complete terms separately from this plugin's MIT license.
+
+The ecosystem already includes [better-caprover-mcp](https://github.com/guilhermebkel/better-caprover-mcp), [coolify-mcp](https://github.com/StuMason/coolify-mcp) and [Kastell](https://github.com/kastelldev/kastell), with existing deployment, preview or health workflows. This project's contribution is the particular native Hermes contract below: a saved baseline, fresh human approval, a durable claim before a possible write and explicit observation after uncertainty. The current release supports that bounded CapRover workflow.
 
 ## Workflow
 
@@ -15,6 +31,7 @@ The ledger survives process restarts. A lost acknowledgement never makes an exis
 
 | Tool | Model arguments | Result |
 | --- | --- | --- |
+| `caprover_doctor` | None | Read-only setup and app checks, with suggested next steps; no plan or deployment request |
 | `caprover_plan` | `image` | Saved state-bound plan; no deployment request |
 | `caprover_apply` | `plan_id` | Fresh native human approval, preflight and one possible deployment attempt |
 | `caprover_reconcile` | `plan_id` | Observation receipt; no deployment request |
@@ -29,7 +46,7 @@ The model cannot choose a server, app, health URL or approval flag. Only an exis
 - Hermes plugin isolation set to **`in_process`** and an interactive session with manual human approvals. Hosted plugin isolation is not supported by this release.
 - A trusted HTTPS CapRover origin, an existing app and an API authentication token suitable for that server.
 
-After this repository is published, install it by repository identifier:
+Install it by repository identifier:
 
 ```sh
 hermes plugins install fmercurio/hermes-caprover-operator
@@ -57,6 +74,20 @@ approvals:
 `health_url` is optional. Plans expire after 30–3600 seconds; approval does not extend the configured lifetime. Use a dedicated Hermes profile for a different server or app.
 
 Every apply needs a fresh human response for its correlated native call. Model arguments, smart/auxiliary-model decisions, YOLO mode, missing correlation identifiers, or missing hooks/middleware cannot create an execution permit. If your Hermes surface cannot provide this approval flow, apply refuses without deploying.
+
+## First use
+
+Start an interactive Hermes session after enabling the plugin and ask:
+
+> Check my CapRover Operator setup and configured app without making changes.
+
+Hermes can call `caprover_doctor` with no arguments, including before setup is complete. It checks owner settings and credential presence, then uses read requests for API/app, optional runtime and configured HTTP health evidence when possible. It creates no plan or persistent ledger. Credential presence and successful authenticated access are reported separately. A ready result means ready to **plan**; the doctor does not test native human approval, plugin isolation or permission to deploy.
+
+Once the check identifies a usable app, provide an image reference with its actual registry digest and ask:
+
+> Plan this immutable image for my configured app. Show me the target, current state, requested image, expiry and plan ID before applying it.
+
+Review the saved intent and the native approval message when you choose to apply. If an acknowledgement is lost, use `caprover_reconcile` with the same plan ID. Inspect `caprover_status` for the local receipt when resuming a conversation. Suggested `guidance.next_step` entries describe an explicit next call; `automatic: false` means the plugin does not execute it on your behalf. Preserve the ledger while an outcome is uncertain.
 
 ## Understanding receipts
 

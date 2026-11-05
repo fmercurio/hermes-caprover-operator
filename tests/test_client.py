@@ -7,7 +7,7 @@ import unittest
 from unittest.mock import patch
 
 from caprover_operator.client import CapRoverClient, ClientError, MAX_RESPONSE_BYTES
-from tests.fake_caprover import FakeCapRover, NEW_IMAGE, OLD_IMAGE
+from caprover_operator.lab import FakeCapRover, NEW_IMAGE, OLD_IMAGE
 
 
 class ClientTests(unittest.TestCase):

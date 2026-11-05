@@ -39,7 +39,10 @@ def _json(value: Any) -> str:
     return json.dumps(value, ensure_ascii=False, sort_keys=True)
 
 
-def _error(code: str) -> str:
+def _error(code: str, plan_id=None) -> str:
+    from .caprover_operator.guidance import error_guidance, safe_error_code
+
+    code = safe_error_code(code)
     messages = {
         "invalid_input": "Use only the arguments declared by this tool.",
         "configuration_required": "Configure the CapRover URL and app in this plugin's settings.",
@@ -51,7 +54,8 @@ def _error(code: str) -> str:
         "plan_not_applicable": "The plan is not pending or does not match the configured CapRover app.",
         "operation_failed": "The request could not be completed. Inspect its status before repeating an operation.",
     }
-    return _json({"error": {"code": code, "message": messages.get(code, messages["operation_failed"])}})
+    return _json({"error": {"code": code, "message": messages.get(code, messages["operation_failed"])},
+                  "guidance": error_guidance(code, plan_id)})
 
 
 def _arguments(args: Any, required: set[str], optional: set[str] | None = None) -> dict:
@@ -166,6 +170,17 @@ def _make_runtime(settings: _Settings):
         operator.close()
 
 
+def _make_diagnostic_client(settings: _Settings, token_provider):
+    """Validate settings and construct a read-only probe without persistent state."""
+    import secrets
+    from .caprover_operator.client import CapRoverClient
+
+    return CapRoverClient(settings.url, token_provider, secrets.token_bytes(32),
+                          allowed_apps=[settings.app],
+                          health_urls={settings.app: settings.health_url} if settings.health_url else None,
+                          timeout=10.0)
+
+
 @dataclass(frozen=True)
 class _Pending:
     plan_id: str
@@ -182,9 +197,11 @@ class _Ticket:
 
 
 @dataclass
-class _Permit:
-    ticket: _Ticket
-    session_id: str
+class _CallContext:
+    key: tuple[str, str, str]
+    plan_id: str
+    plan_hash: str
+    binding: _Binding
     used: bool = False
 
 
@@ -201,18 +218,75 @@ class _Adapter:
         self._lock = threading.Lock()
         self._pending: dict[tuple[str, str, str], _Pending] = {}
         self._tickets: dict[tuple[str, str, str], _Ticket] = {}
-        self._permit: ContextVar[_Permit | None] = ContextVar("caprover_operator_permit", default=None)
+        self._active_calls: set[tuple[str, str, str]] = set()
+        self._call_context: ContextVar[_CallContext | None] = ContextVar("caprover_operator_call", default=None)
 
-    def _settings(self) -> _Settings:
+    def _configuration(self):
         url = self.ctx.get_config("url", default="")
         app = self.ctx.get_config("app_name", default="")
         health_url = self.ctx.get_config("health_url", default="")
         ttl = self.ctx.get_config("plan_ttl_seconds", default=300)
-        if not isinstance(url, str) or not url.strip() or not isinstance(app, str) or not app.strip():
+        missing = [key for key, value in (("url", url), ("app_name", app)) if isinstance(value, str) and not value.strip()]
+        invalid = [key for key, value in (("url", url), ("app_name", app), ("health_url", health_url)) if not isinstance(value, str)]
+        if type(ttl) is not int or not 30 <= ttl <= 3600:
+            invalid.append("plan_ttl_seconds")
+        if missing or invalid:
+            return None, {"status": "missing_or_invalid", "missing_fields": missing, "invalid_fields": invalid}
+        return _Settings(url.strip(), app.strip(), health_url.strip(), ttl), {"status": "present"}
+
+    def _settings(self) -> _Settings:
+        settings, _ = self._configuration()
+        if settings is None:
             raise _Refused("configuration_required")
-        if not isinstance(health_url, str) or type(ttl) is not int or not 30 <= ttl <= 3600:
-            raise _Refused("configuration_required")
-        return _Settings(url.strip(), app.strip(), health_url.strip(), ttl)
+        return settings
+
+    def doctor(self, args, **kwargs):
+        from .caprover_operator.diagnostics import inspect_read_only, new_report
+        from .caprover_operator.guidance import error_guidance, safe_error_code, suggestion
+
+        try:
+            _arguments(args, set())
+        except _Refused as exc:
+            return _error(exc.code)
+        report = new_report()
+        checks = report["checks"]
+        try:
+            settings, checks["configuration"] = self._configuration()
+        except Exception:
+            report["status"] = "unavailable"
+            checks["configuration"] = {"status": "unavailable"}
+            report["guidance"] = error_guidance("configuration_required")
+            return _json(report)
+        token = None
+        try:
+            token = _token_provider()
+            checks["credential"] = {"status": "present_unverified"}
+        except Exception as exc:
+            code = safe_error_code(getattr(exc, "code", None))
+            checks["credential"] = {"status": "missing" if code == "token_missing" else "unavailable"}
+        if settings is None:
+            report["guidance"] = error_guidance("configuration_required")
+            return _json(report)
+        try:
+            client = _make_diagnostic_client(settings, lambda: token)
+        except Exception as exc:
+            code = safe_error_code(getattr(exc, "code", None))
+            if code == "configuration_invalid":
+                checks["configuration"] = {"status": "invalid"}
+                report["guidance"] = error_guidance(code)
+            else:
+                report["status"] = "unavailable"
+                report["guidance"] = suggestion("diagnostic_unavailable",
+                    "The read-only diagnostic could not be initialized. Check the Hermes installation and owner settings, then explicitly run the doctor again. No deployment was attempted.",
+                    "caprover_doctor")
+            return _json(report)
+        checks["configuration"] = {"status": "valid"}
+        if token is None:
+            missing = checks["credential"]["status"] == "missing"
+            report["status"] = "needs_credentials" if missing else "unavailable"
+            report["guidance"] = error_guidance("token_missing" if missing else "authentication_unavailable")
+            return _json(report)
+        return _json(inspect_read_only(client, settings.app, report))
 
     def _prune(self, now: float) -> None:
         for key in [key for key, item in self._pending.items() if item.deadline <= now]:
@@ -244,17 +318,17 @@ class _Adapter:
             and pending.plan_hash == plan.get("plan_hash")
         )
 
-    def _run(self, operation) -> str:
+    def _run(self, operation, plan_id=None) -> str:
+        from .caprover_operator.guidance import explain
+
         try:
             with _make_runtime(self._settings()) as runtime:
-                return _json(operation(runtime))
+                return _json(explain(operation(runtime), plan_id, configured_app=runtime.settings.app,
+                                     configured_target=runtime.binding.target))
         except _Refused as exc:
-            return _error(exc.code)
+            return _error(exc.code, plan_id)
         except Exception as exc:
-            code = getattr(exc, "code", "operation_failed")
-            if not isinstance(code, str) or not re.fullmatch(r"[a-z][a-z0-9_]{0,63}", code):
-                code = "operation_failed"
-            return _error(code)
+            return _error(getattr(exc, "code", None), plan_id)
 
     def plan(self, args, **kwargs):
         try:
@@ -268,7 +342,7 @@ class _Adapter:
             values = _arguments(args, set(), {"plan_id"})
         except _Refused as exc:
             return _error(exc.code)
-        return self._run(lambda runtime: runtime.operator.status(values.get("plan_id")))
+        return self._run(lambda runtime: runtime.operator.status(values.get("plan_id")), values.get("plan_id"))
 
     def reconcile(self, args, **kwargs):
         try:
@@ -280,36 +354,44 @@ class _Adapter:
             self._bound_plan(runtime, runtime.operator.get_plan(values["plan_id"]))
             return runtime.operator.reconcile(values["plan_id"])
 
-        return self._run(observe)
+        return self._run(observe, values["plan_id"])
 
     def apply(self, args, *, session_id="", **kwargs):
         try:
             values = _arguments(args, {"plan_id"})
-            permit = self._permit.get()
-            if permit is None or permit.session_id != session_id or permit.ticket.pending.plan_id != values["plan_id"]:
+            context = self._call_context.get()
+            if context is None or context.key[0] != session_id or context.plan_id != values["plan_id"]:
                 raise _Refused("native_approval_required")
             with self._lock:
-                if permit.used or permit.ticket.deadline <= time.monotonic():
+                if context.used:
                     raise _Refused("native_approval_required")
-                permit.used = True
+                context.used = True
+                ticket = self._tickets.pop(context.key, None)
+                self._pending.pop(context.key, None)
+            if ticket is None or ticket.deadline <= time.monotonic():
+                raise _Refused("native_approval_required")
+            if (context.plan_hash != ticket.pending.plan_hash
+                    or context.binding != ticket.pending.binding
+                    or context.plan_id != ticket.pending.plan_id):
+                raise _Refused("configuration_changed")
         except _Refused as exc:
-            return _error(exc.code)
+            return _error(exc.code, args.get("plan_id") if isinstance(args, dict) else None)
 
         def execute(runtime):
             plan = self._bound_plan(runtime, runtime.operator.get_plan(values["plan_id"]))
-            if not self._same_plan(permit.ticket.pending, runtime, plan):
+            if not self._same_plan(ticket.pending, runtime, plan):
                 raise _Refused("configuration_changed")
 
             def authorize(actual_plan):
                 return (
-                    time.monotonic() < permit.ticket.deadline
-                    and self._same_plan(permit.ticket.pending, runtime, actual_plan)
+                    time.monotonic() < ticket.deadline
+                    and self._same_plan(ticket.pending, runtime, actual_plan)
                     and self._settings() == runtime.settings
                 )
 
             return runtime.operator.apply(values["plan_id"], authorize)
 
-        return self._run(execute)
+        return self._run(execute, values["plan_id"])
 
     def before_tool(self, tool_name, args, *, session_id="", turn_id="", tool_call_id="", **kwargs):
         if tool_name != APPLY_TOOL:
@@ -336,9 +418,9 @@ class _Adapter:
                 self._pending[key] = pending
             return {"action": "approve", "message": message, "rule_key": rule_key}
         except _Refused as exc:
-            return {"action": "block", "message": _error(exc.code)}
+            return {"action": "block", "message": _error(exc.code, args.get("plan_id") if isinstance(args, dict) else None)}
         except Exception:
-            return {"action": "block", "message": _error("operation_failed")}
+            return {"action": "block", "message": _error("operation_failed", args.get("plan_id") if isinstance(args, dict) else None)}
 
     def after_approval(
         self, *, pattern_key="", pattern_keys=None, choice="", decided_by=None,
@@ -357,6 +439,7 @@ class _Adapter:
                     return
                 self._tickets.pop(key, None)
                 if choice not in {"once", "session", "always"} or decided_by not in {None, "", "human", "user"}:
+                    self._pending.pop(key, None)
                     return
                 self._tickets[key] = _Ticket(pending, min(pending.deadline, now + _TICKET_SECONDS))
         except Exception:
@@ -367,29 +450,39 @@ class _Adapter:
     def execution(self, tool_name, args, next_call, *, session_id="", turn_id="", tool_call_id="", **kwargs):
         if tool_name != APPLY_TOOL:
             return next_call(args)
+        key, owns_call, context_token = None, False, None
         try:
-            values = _arguments(args, {"plan_id"})
-            key = _call_key(session_id, turn_id, tool_call_id)
-            with self._lock:
-                self._prune(time.monotonic())
-                ticket = self._tickets.pop(key, None)
-                self._pending.pop(key, None)
-            if ticket is None or ticket.pending.plan_id != values["plan_id"]:
-                raise _Refused("native_approval_required")
-            with _make_runtime(self._settings()) as runtime:
-                plan = self._bound_plan(runtime, runtime.operator.get_plan(values["plan_id"]))
-                if not self._same_plan(ticket.pending, runtime, plan):
-                    raise _Refused("configuration_changed")
-        except _Refused as exc:
-            return _error(exc.code)
-        except Exception:
-            return _error("operation_failed")
+            try:
+                values = _arguments(args, {"plan_id"})
+                key = _call_key(session_id, turn_id, tool_call_id)
+                with self._lock:
+                    self._prune(time.monotonic())
+                    if key in self._active_calls:
+                        raise _Refused("native_approval_required")
+                    self._active_calls.add(key)
+                    owns_call = True
+                with _make_runtime(self._settings()) as runtime:
+                    plan = self._bound_plan(runtime, runtime.operator.get_plan(values["plan_id"]), pending_only=True)
+                    context = _CallContext(key, plan["plan_id"], plan["plan_hash"], runtime.binding)
+            except _Refused as exc:
+                return _error(exc.code, args.get("plan_id") if isinstance(args, dict) else None)
+            except Exception:
+                return _error("operation_failed", args.get("plan_id") if isinstance(args, dict) else None)
 
-        context_token = self._permit.set(_Permit(ticket, session_id))
-        try:
+            # AIAgent wraps its approval gate inside execution middleware;
+            # the direct dispatcher runs that gate before middleware. Bind
+            # identity here, but let the handler consume a real post-approval
+            # ticket only after next_call has traversed the host's gate.
+            context_token = self._call_context.set(context)
             return next_call(args)
         finally:
-            self._permit.reset(context_token)
+            if context_token is not None:
+                self._call_context.reset(context_token)
+            if owns_call:
+                with self._lock:
+                    self._pending.pop(key, None)
+                    self._tickets.pop(key, None)
+                    self._active_calls.discard(key)
 
 
 def _schema(name, description, properties, required):
@@ -403,6 +496,7 @@ def _schema(name, description, properties, required):
 def register(ctx):
     adapter = _Adapter(ctx)
     tools = (
+        ("caprover_doctor", "Diagnose first-use configuration, credential presence, API/app access and optional runtime/health using read-only checks. No ledger, plan, deployment or approval is created; readiness is for planning only.", {}, [], adapter.doctor),
         ("caprover_plan", "Plan an image deployment for the owner-configured app. Reads current state and saves a private plan; does not deploy.", {"image": {"type": "string", "description": "Immutable image reference ending in @sha256:<64 hex characters>."}}, ["image"], adapter.plan),
         (APPLY_TOOL, "Apply one saved plan after human approval in Hermes. Refuses changed state and repeated or uncertain attempts. Server and app come from owner settings.", {"plan_id": {"type": "string", "description": "Plan ID returned by caprover_plan."}}, ["plan_id"], adapter.apply),
         ("caprover_reconcile", "Observe an existing deployment attempt and update its receipt. Never sends a deployment request.", {"plan_id": {"type": "string"}}, ["plan_id"], adapter.reconcile),

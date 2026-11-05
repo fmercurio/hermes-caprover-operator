@@ -144,7 +144,7 @@ class HermesAdapterTests(unittest.TestCase):
         with patch.object(plugin, "_make_runtime", side_effect=AssertionError("registration I/O")):
             plugin.register(ctx)
         self.assertEqual(ctx.reads, 0)
-        self.assertEqual(set(ctx.tools), {"caprover_plan", "caprover_apply", "caprover_reconcile", "caprover_status"})
+        self.assertEqual(set(ctx.tools), {"caprover_doctor", "caprover_plan", "caprover_apply", "caprover_reconcile", "caprover_status"})
         self.assertEqual(set(ctx.hooks), {"pre_tool_call", "post_approval_response"})
         self.assertEqual(set(ctx.middleware), {"tool_execution"})
 

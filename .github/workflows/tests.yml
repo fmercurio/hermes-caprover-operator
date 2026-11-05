@@ -29,3 +29,104 @@ jobs:
         run: python -m pytest -p no:cacheprovider --tb=short -q
       - name: Executable protocol demonstration
         run: python -m caprover_operator demo --json
+
+  native-hermes:
+    name: Native Hermes approval and AIAgent pipeline
+    runs-on: ubuntu-24.04
+    timeout-minutes: 25
+    env:
+      HERMES_SOURCE_SHA: f0d94882e89ab8d4098b5bb2f166adfb9ee0a0ab
+      PYTEST_DISABLE_PLUGIN_AUTOLOAD: '1'
+      PYTHONDONTWRITEBYTECODE: '1'
+      PYTHONHASHSEED: '0'
+      TZ: UTC
+      LANG: C.UTF-8
+      OPENAI_API_KEY: ''
+      OPENROUTER_API_KEY: ''
+      NOUS_API_KEY: ''
+    steps:
+      # The official PM action resolves its source and cache inputs from the
+      # Hermes checkout. Keep that checkout at the workspace root, then place
+      # the exact candidate revision in its own directory.
+      - name: Check out the pinned public Hermes runtime
+        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
+        with:
+          repository: NousResearch/hermes-agent
+          ref: f0d94882e89ab8d4098b5bb2f166adfb9ee0a0ab
+          persist-credentials: false
+      - name: Check out the exact plugin candidate
+        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
+        with:
+          ref: ${{ github.sha }}
+          path: hermes-caprover-operator
+          persist-credentials: false
+      - name: Verify both source revisions
+        env:
+          CANDIDATE_SHA: ${{ github.sha }}
+        run: |
+          test "$(git rev-parse HEAD)" = "$HERMES_SOURCE_SHA"
+          test "$(git -C hermes-caprover-operator rev-parse HEAD)" = "$CANDIDATE_SHA"
+          # Version admission derives the release from Git. Fetch only the
+          # release tag at this exact commit, avoiding an unknown version in
+          # the shallow checkout or a hand-written install stamp.
+          git fetch --no-tags --depth=1 origin refs/tags/v0.22.6:refs/tags/v0.22.6
+          test "$(git rev-parse 'v0.22.6^{}')" = "$HERMES_SOURCE_SHA"
+      - name: Prepare the official locked Python 3.14 test environment
+        uses: ./.github/actions/setup-pm
+        with:
+          toolchain: python
+          extras: '[]'
+          test-environment: 'true'
+          cache-suffix: caprover-native-f0d94882
+      - name: Require an importable native AIAgent runtime
+        working-directory: hermes-caprover-operator
+        run: |
+          "$HERMES_PYTHON" - <<'PY'
+          import hashlib
+          import importlib
+          import os
+          import subprocess
+          import sys
+          from pathlib import Path
+          assert sys.version_info[:2] == (3, 14), sys.version
+          source = Path.cwd().parent.resolve()
+          # PM may legitimately project source into its managed workspace.
+          # Compare imported core bytes with the pin instead of requiring a
+          # particular physical import path.
+          for name, relative in (
+              ("run_agent", "run_agent.py"),
+              ("agent.tool_executor", "agent/tool_executor.py"),
+              ("hermes_cli.plugins", "hermes_cli/plugins.py"),
+              ("hermes_cli.middleware", "hermes_cli/middleware.py"),
+          ):
+              module = importlib.import_module(name)
+              expected = subprocess.check_output(["git", "-C", str(source), "show", f"{os.environ['HERMES_SOURCE_SHA']}:{relative}"])
+              assert hashlib.sha256(Path(module.__file__).read_bytes()).digest() == hashlib.sha256(expected).digest(), name
+          from run_agent import AIAgent
+          from hermes_cli.plugins_manifest import running_hermes_version
+          assert AIAgent is not None
+          assert running_hermes_version() == "0.22.6"
+          print("Pinned native Hermes and AIAgent imports are available.")
+          PY
+      - name: Exercise native discovery, approval, AIAgent and restart behavior
+        working-directory: hermes-caprover-operator
+        run: |
+          "$HERMES_PYTHON" -m pytest -p no:cacheprovider --tb=short -q \
+            tests/test_agent_pipeline.py::NativeAgentPipelineTests \
+            tests/test_native_end_to_end.py::NativeEndToEndTests \
+            tests/test_hermes_adapter.py::NativeHermesApprovalTests \
+            tests/test_doctor.py::NativeFirstUseTests \
+            --junitxml="$RUNNER_TEMP/caprover-native-results.xml"
+      - name: Refuse an empty or skipped native test lane
+        run: |
+          "$HERMES_PYTHON" - <<'PY'
+          import os
+          from pathlib import Path
+          import xml.etree.ElementTree as ET
+          report = Path(os.environ["RUNNER_TEMP"]) / "caprover-native-results.xml"
+          cases = list(ET.parse(report).getroot().iter("testcase"))
+          assert cases, "Native test lane executed no tests."
+          assert not any(case.find("skipped") is not None for case in cases), "Native tests must execute, not skip."
+          assert any("NativeAgentPipelineTests" in case.get("classname", "") for case in cases), "The real AIAgent regression did not execute."
+          print(f"Executed {len(cases)} native tests without skips, including AIAgent.")
+          PY

@@ -47,6 +47,7 @@ class ClientError(Exception):
         super().__init__({
             "configuration_invalid": "CapRover client configuration is invalid.",
             "app_not_allowed": "The application is not configured for this client.",
+            "app_not_found": "The configured application was not found on this server.",
             "image_invalid": "An immutable SHA-256 image reference is required.",
             "authentication_unavailable": "The configured credential is unavailable.",
             "authentication_rejected": "CapRover rejected authentication.",
@@ -319,6 +320,8 @@ class CapRoverClient:
         if not isinstance(definitions, list) or any(not isinstance(v, dict) for v in definitions):
             raise ClientError("response_invalid")
         matches = [v for v in definitions if v.get("appName") == app]
+        if not matches:
+            raise ClientError("app_not_found")
         if len(matches) != 1:
             raise ClientError("response_invalid")
         definition = matches[0]

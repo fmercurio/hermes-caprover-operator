@@ -19,7 +19,7 @@ import sys
 import tempfile
 import unittest
 
-from fake_caprover import FakeCapRover, NEW_IMAGE
+from caprover_operator.lab import FakeCapRover, NEW_IMAGE
 
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -150,6 +150,8 @@ class NativeEndToEndTests(unittest.TestCase):
 
             planned = call("caprover_plan", {"image": NEW_IMAGE})["result"]
             self.assertEqual(planned["status"], "planned")
+            self.assertEqual(planned["guidance"]["next_step"]["tool"], "caprover_apply")
+            self.assertTrue(planned["guidance"]["next_step"]["requires_native_human_approval"])
             self.assertEqual(stat.S_IMODE(data_dir.stat().st_mode), 0o700)
             self.assertEqual(stat.S_IMODE((data_dir / "fingerprint.key").stat().st_mode), 0o600)
 
@@ -157,6 +159,7 @@ class NativeEndToEndTests(unittest.TestCase):
             drifted = call("caprover_apply", {"plan_id": planned["plan_id"]})
             self.assertEqual(drifted["prompts"], 1)
             self.assertEqual(drifted["result"]["status"], "consumed_drift")
+            self.assertEqual(drifted["result"]["guidance"]["next_step"]["tool"], "caprover_plan")
             self.assertFalse(drifted["result"]["checks"]["post_attempted"])
             self.assertEqual(server.trigger_count, 0)
 
@@ -167,6 +170,9 @@ class NativeEndToEndTests(unittest.TestCase):
             self.assertEqual(uncertain["prompts"], 1)
             self.assertEqual(uncertain["result"]["status"], "reconcile_required")
             self.assertEqual(uncertain["result"]["trigger_outcome"], "uncertain")
+            self.assertEqual(uncertain["result"]["guidance"]["next_step"]["arguments"], {"plan_id": fresh["plan_id"]})
+            self.assertEqual(uncertain["result"]["guidance"]["next_step"]["tool"], "caprover_reconcile")
+            self.assertFalse(uncertain["result"]["guidance"]["automatic"])
             self.assertEqual(server.trigger_count, 1)
 
             replay = call("caprover_apply", {"plan_id": fresh["plan_id"]})
@@ -187,6 +193,7 @@ class NativeEndToEndTests(unittest.TestCase):
             self.assertEqual(reconciled["prompts"], 0)
             receipt = reconciled["result"]
             self.assertEqual(receipt["status"], "metadata_http_observed")
+            self.assertEqual(receipt["guidance"]["next_step"]["tool"], "caprover_reconcile")
             self.assertFalse(receipt["checks"]["runtime_rollout_proven"])
             self.assertTrue(receipt["checks"]["newer_version"])
             self.assertTrue(receipt["checks"]["exact_image"])

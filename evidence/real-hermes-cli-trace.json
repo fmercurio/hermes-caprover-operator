@@ -1,0 +1,687 @@
+{
+  "demo_kind": "actual_hermes_cli_real_disposable_caprover",
+  "generated_at": "2026-11-05T19:06:55.651757+00:00",
+  "scope": {
+    "real_caprover": true,
+    "version": "1.16.0",
+    "native_cli": true,
+    "real_model": true,
+    "model": "gpt-6.1-sol",
+    "approval_surface": "unmodified native CLI",
+    "operator": "automation under user-authorized lab scope",
+    "human_keypress": false,
+    "production_traffic": false,
+    "default_plugin_engine_client": true,
+    "tls": "ephemeral lab CA for isolated child only"
+  },
+  "events": [
+    {
+      "event": "cli_process",
+      "index": 1,
+      "started_at": "2026-11-05T19:06:55.873806+00:00",
+      "posts_before": 0,
+      "exit_code": 0,
+      "posts_after": 1,
+      "ended_at": "2026-11-05T19:11:03.440389+00:00"
+    },
+    {
+      "event": "cli_process",
+      "index": 2,
+      "started_at": "2026-11-05T19:11:14.186317+00:00",
+      "posts_before": 1,
+      "exit_code": 0,
+      "posts_after": 1,
+      "ended_at": "2026-11-05T19:14:50.417877+00:00"
+    }
+  ],
+  "post_attempts": 1,
+  "plugin_source_sha256": {
+    "__init__.py": "a546afe37ff3e409327731c1dfe02f18c67982e7fa587d1349fba83b6093fa5c",
+    "caprover_operator/__init__.py": "0aa1438d9af523cbb959ed5d2fc817a2d537a172c76c60b2435a8f242c2f059f",
+    "caprover_operator/__main__.py": "18319ba67547ab0e79653c7705873886a981d69f2e1003b70b39e51f390d2405",
+    "caprover_operator/client.py": "d94c7d42242302ea1eac827d70ad2aba146696e7645a393e6528f454c8e69db3",
+    "caprover_operator/demo.py": "cf5e0d743f1f963a95a04e58f507387defcbfd3a104ef8aa001df44bc8f2eeb6",
+    "caprover_operator/diagnostics.py": "20e7012ba26f5bfa82d9df260dd1cd29843d2de1b9e5d4983c79baf07b402fca",
+    "caprover_operator/engine.py": "1ae55ae11e76508f98f09abc402224e20754004312421f5e5db94099dfe47e9c",
+    "caprover_operator/guidance.py": "83d6b32a275c08859b52a5fd63d4d7ce8b9e4591a5620ddf64b18dd65bd7c52b",
+    "caprover_operator/lab.py": "4d967cb61ee0e610ce5eea159e8984c33d8d1f7b0fe63eff0247eb6d8b869042",
+    "plugin.yaml": "3a8240eae0be76ff2dec37ec847194d4fec5cd1293e2cba6d506004b766e82b3"
+  },
+  "tool_results": [
+    {
+      "tool_name": "caprover_doctor",
+      "public_result": {
+        "checked_at": "2026-11-05T19:07:18.243954+00:00",
+        "checks": {
+          "app": {
+            "configured_replicas": 1,
+            "image_known": true,
+            "is_building": false,
+            "status": "found"
+          },
+          "approval": {
+            "deployment_authorized": false,
+            "required": "fresh_native_human",
+            "status": "not_tested",
+            "supported_isolation": "in_process"
+          },
+          "configuration": {
+            "status": "valid"
+          },
+          "connection": {
+            "status": "responded"
+          },
+          "credential": {
+            "status": "accepted_by_api"
+          },
+          "health": {
+            "ok": true,
+            "status": "responded",
+            "status_code": 200
+          },
+          "runtime": {
+            "current_task_count": 1,
+            "desired_instances": 1,
+            "running_instances": 1,
+            "status": "available"
+          }
+        },
+        "guidance": {
+          "automatic": false,
+          "code": "request_immutable_image_plan",
+          "message": "The app API accepted the credential and returned a known image. You can request a plan for an intended immutable image. Local ledger access, native human approval and in_process execution were not tested or authorized.",
+          "next_step": {
+            "arguments": {},
+            "required_input": [
+              "image"
+            ],
+            "requires_native_human_approval": false,
+            "tool": "caprover_plan"
+          }
+        },
+        "limitations": [
+          "local_storage_not_tested",
+          "native_execution_approval_not_tested"
+        ],
+        "read_only": true,
+        "readiness_scope": "planning_only",
+        "status": "ready_for_planning"
+      }
+    },
+    {
+      "tool_name": "caprover_plan",
+      "public_result": {
+        "app": "operator-demo",
+        "baseline": {
+          "app": "operator-demo",
+          "config_fingerprint": "208112f9d18519531ad856fa218bca86b2464490764a52686214a6cdc74f174b",
+          "image": "nginx@sha256:a8b39bd9cf0f83869a2162827a0caf6137ddf759d50a171451b335cecc87d236",
+          "is_building": false,
+          "replicas": 1,
+          "running_replicas": 1,
+          "runtime": {
+            "available": true,
+            "current_tasks": [
+              {
+                "desired_state": "running",
+                "image": "nginx@sha256:a8b39bd9cf0f83869a2162827a0caf6137ddf759d50a171451b335cecc87d236",
+                "slot": 1,
+                "state": "running"
+              }
+            ],
+            "desired_instances": 1,
+            "running_instances": 1
+          },
+          "version": 1
+        },
+        "created_at": 1793905691.446315,
+        "expires_at": 1793909291.446315,
+        "guidance": {
+          "automatic": false,
+          "code": "review_then_request_approval",
+          "message": "Review the target, image, baseline and expiry. Apply this saved plan only when you intend the deployment; Hermes will require a fresh native human approval.",
+          "next_step": {
+            "arguments": {
+              "plan_id": "cc0f20d7a9b448cea059eba232faf6e9"
+            },
+            "requires_native_human_approval": true,
+            "tool": "caprover_apply"
+          }
+        },
+        "image": "nginx@sha256:5616878291a2eed594aee8db4dade5878cf7edcb475e59193904b198d9b830de",
+        "plan_hash": "871f537855117a22b954cea4750f0b00f02d4739cf75f1e7617c1a5a3265cdff",
+        "plan_id": "cc0f20d7a9b448cea059eba232faf6e9",
+        "status": "planned",
+        "target": "https://127.0.0.1:56373"
+      }
+    },
+    {
+      "tool_name": "caprover_apply",
+      "public_result": {
+        "app": "operator-demo",
+        "attempted_at": 1793905827.445597,
+        "baseline": {
+          "app": "operator-demo",
+          "config_fingerprint": "208112f9d18519531ad856fa218bca86b2464490764a52686214a6cdc74f174b",
+          "image": "nginx@sha256:a8b39bd9cf0f83869a2162827a0caf6137ddf759d50a171451b335cecc87d236",
+          "is_building": false,
+          "replicas": 1,
+          "running_replicas": 1,
+          "runtime": {
+            "available": true,
+            "current_tasks": [
+              {
+                "desired_state": "running",
+                "image": "nginx@sha256:a8b39bd9cf0f83869a2162827a0caf6137ddf759d50a171451b335cecc87d236",
+                "slot": 1,
+                "state": "running"
+              }
+            ],
+            "desired_instances": 1,
+            "running_instances": 1
+          },
+          "version": 1
+        },
+        "checks": {
+          "post_attempted": true,
+          "preflight": "matched",
+          "runtime_rollout_proven": false
+        },
+        "consumed_at": 1793905827.369229,
+        "created_at": 1793905691.446315,
+        "expires_at": 1793909291.446315,
+        "guidance": {
+          "automatic": false,
+          "code": "reconcile_same_operation",
+          "message": "The deployment outcome is uncertain. Explicitly reconcile this same saved plan. Do not repeat apply, delete the ledger or create a replacement to bypass uncertainty.",
+          "next_step": {
+            "arguments": {
+              "plan_id": "cc0f20d7a9b448cea059eba232faf6e9"
+            },
+            "requires_native_human_approval": false,
+            "tool": "caprover_reconcile"
+          }
+        },
+        "image": "nginx@sha256:5616878291a2eed594aee8db4dade5878cf7edcb475e59193904b198d9b830de",
+        "plan_hash": "871f537855117a22b954cea4750f0b00f02d4739cf75f1e7617c1a5a3265cdff",
+        "plan_id": "cc0f20d7a9b448cea059eba232faf6e9",
+        "requested": {
+          "image": "nginx@sha256:5616878291a2eed594aee8db4dade5878cf7edcb475e59193904b198d9b830de"
+        },
+        "status": "reconcile_required",
+        "target": "https://127.0.0.1:56373",
+        "trigger_outcome": "uncertain"
+      }
+    },
+    {
+      "tool_name": "caprover_status",
+      "public_result": {
+        "app": "operator-demo",
+        "attempted_at": 1793905827.445597,
+        "baseline": {
+          "app": "operator-demo",
+          "config_fingerprint": "208112f9d18519531ad856fa218bca86b2464490764a52686214a6cdc74f174b",
+          "image": "nginx@sha256:a8b39bd9cf0f83869a2162827a0caf6137ddf759d50a171451b335cecc87d236",
+          "is_building": false,
+          "replicas": 1,
+          "running_replicas": 1,
+          "runtime": {
+            "available": true,
+            "current_tasks": [
+              {
+                "desired_state": "running",
+                "image": "nginx@sha256:a8b39bd9cf0f83869a2162827a0caf6137ddf759d50a171451b335cecc87d236",
+                "slot": 1,
+                "state": "running"
+              }
+            ],
+            "desired_instances": 1,
+            "running_instances": 1
+          },
+          "version": 1
+        },
+        "checks": {
+          "post_attempted": true,
+          "preflight": "matched",
+          "runtime_rollout_proven": false
+        },
+        "consumed_at": 1793905827.369229,
+        "created_at": 1793905691.446315,
+        "expires_at": 1793909291.446315,
+        "guidance": {
+          "automatic": false,
+          "code": "reconcile_same_operation",
+          "message": "The deployment outcome is uncertain. Explicitly reconcile this same saved plan. Do not repeat apply, delete the ledger or create a replacement to bypass uncertainty.",
+          "next_step": {
+            "arguments": {
+              "plan_id": "cc0f20d7a9b448cea059eba232faf6e9"
+            },
+            "requires_native_human_approval": false,
+            "tool": "caprover_reconcile"
+          }
+        },
+        "image": "nginx@sha256:5616878291a2eed594aee8db4dade5878cf7edcb475e59193904b198d9b830de",
+        "plan_hash": "871f537855117a22b954cea4750f0b00f02d4739cf75f1e7617c1a5a3265cdff",
+        "plan_id": "cc0f20d7a9b448cea059eba232faf6e9",
+        "requested": {
+          "image": "nginx@sha256:5616878291a2eed594aee8db4dade5878cf7edcb475e59193904b198d9b830de"
+        },
+        "status": "reconcile_required",
+        "target": "https://127.0.0.1:56373",
+        "trigger_outcome": "uncertain"
+      }
+    },
+    {
+      "tool_name": "caprover_apply",
+      "public_result": {
+        "error": {
+          "code": "plan_not_applicable",
+          "message": "The plan is not pending or does not match the configured CapRover app."
+        },
+        "guidance": {
+          "automatic": false,
+          "code": "inspect_saved_operation",
+          "message": "Inspect the saved plan and its status. If it is uncertain, reconcile it instead of applying again. A completed or consumed plan cannot authorize a new deployment.",
+          "next_step": {
+            "arguments": {
+              "plan_id": "cc0f20d7a9b448cea059eba232faf6e9"
+            },
+            "requires_native_human_approval": false,
+            "tool": "caprover_status"
+          }
+        }
+      }
+    },
+    {
+      "tool_name": "caprover_reconcile",
+      "public_result": {
+        "app": "operator-demo",
+        "attempted_at": 1793905827.445597,
+        "baseline": {
+          "app": "operator-demo",
+          "config_fingerprint": "208112f9d18519531ad856fa218bca86b2464490764a52686214a6cdc74f174b",
+          "image": "nginx@sha256:a8b39bd9cf0f83869a2162827a0caf6137ddf759d50a171451b335cecc87d236",
+          "is_building": false,
+          "replicas": 1,
+          "running_replicas": 1,
+          "runtime": {
+            "available": true,
+            "current_tasks": [
+              {
+                "desired_state": "running",
+                "image": "nginx@sha256:a8b39bd9cf0f83869a2162827a0caf6137ddf759d50a171451b335cecc87d236",
+                "slot": 1,
+                "state": "running"
+              }
+            ],
+            "desired_instances": 1,
+            "running_instances": 1
+          },
+          "version": 1
+        },
+        "checks": {
+          "configured_replicas": 1,
+          "deployment_recorded": true,
+          "exact_image": true,
+          "http_health": {
+            "configured": true,
+            "ok": true,
+            "reason": "health_passed",
+            "status_code": 200
+          },
+          "newer_version": true,
+          "not_building": true,
+          "replica_evidence": "observed",
+          "running_replicas": 1,
+          "runtime_rollout_proven": true
+        },
+        "consumed_at": 1793905827.369229,
+        "created_at": 1793905691.446315,
+        "expires_at": 1793909291.446315,
+        "first_metadata_observed": {
+          "image": "nginx@sha256:5616878291a2eed594aee8db4dade5878cf7edcb475e59193904b198d9b830de",
+          "observed_at": 1793906032.4368582,
+          "version": 2
+        },
+        "guidance": {
+          "automatic": false,
+          "code": "inspect_dated_receipt",
+          "message": "The dated task and HTTP evidence passed. Keep the receipt; it does not prove migrations, ongoing availability or exclusive causation.",
+          "next_step": {
+            "arguments": {
+              "plan_id": "cc0f20d7a9b448cea059eba232faf6e9"
+            },
+            "requires_native_human_approval": false,
+            "tool": "caprover_status"
+          }
+        },
+        "image": "nginx@sha256:5616878291a2eed594aee8db4dade5878cf7edcb475e59193904b198d9b830de",
+        "observation": "available",
+        "observation_history": [
+          {
+            "checks": {
+              "configured_replicas": 1,
+              "deployment_recorded": true,
+              "exact_image": true,
+              "http_health": {
+                "configured": true,
+                "ok": true,
+                "reason": "health_passed",
+                "status_code": 200
+              },
+              "newer_version": true,
+              "not_building": true,
+              "replica_evidence": "observed",
+              "running_replicas": 1,
+              "runtime_rollout_proven": true
+            },
+            "image": "nginx@sha256:5616878291a2eed594aee8db4dade5878cf7edcb475e59193904b198d9b830de",
+            "observation": "available",
+            "observed_at": 1793906032.4368582,
+            "status": "verified",
+            "version": 2
+          }
+        ],
+        "observed": {
+          "app": "operator-demo",
+          "config_fingerprint": "7ef6e8de5a6f8435097991555b7d99fdc14fd7d860bbcf146b966d1951ed5868",
+          "image": "nginx@sha256:5616878291a2eed594aee8db4dade5878cf7edcb475e59193904b198d9b830de",
+          "is_building": false,
+          "replicas": 1,
+          "running_replicas": 1,
+          "runtime": {
+            "available": true,
+            "current_tasks": [
+              {
+                "desired_state": "running",
+                "image": "nginx@sha256:5616878291a2eed594aee8db4dade5878cf7edcb475e59193904b198d9b830de",
+                "slot": 1,
+                "state": "running"
+              }
+            ],
+            "desired_instances": 1,
+            "running_instances": 1
+          },
+          "version": 2
+        },
+        "observed_at": 1793906032.4368582,
+        "plan_hash": "871f537855117a22b954cea4750f0b00f02d4739cf75f1e7617c1a5a3265cdff",
+        "plan_id": "cc0f20d7a9b448cea059eba232faf6e9",
+        "requested": {
+          "image": "nginx@sha256:5616878291a2eed594aee8db4dade5878cf7edcb475e59193904b198d9b830de"
+        },
+        "status": "verified",
+        "target": "https://127.0.0.1:56373",
+        "trigger_outcome": "uncertain"
+      }
+    },
+    {
+      "tool_name": "caprover_status",
+      "public_result": {
+        "app": "operator-demo",
+        "attempted_at": 1793905827.445597,
+        "baseline": {
+          "app": "operator-demo",
+          "config_fingerprint": "208112f9d18519531ad856fa218bca86b2464490764a52686214a6cdc74f174b",
+          "image": "nginx@sha256:a8b39bd9cf0f83869a2162827a0caf6137ddf759d50a171451b335cecc87d236",
+          "is_building": false,
+          "replicas": 1,
+          "running_replicas": 1,
+          "runtime": {
+            "available": true,
+            "current_tasks": [
+              {
+                "desired_state": "running",
+                "image": "nginx@sha256:a8b39bd9cf0f83869a2162827a0caf6137ddf759d50a171451b335cecc87d236",
+                "slot": 1,
+                "state": "running"
+              }
+            ],
+            "desired_instances": 1,
+            "running_instances": 1
+          },
+          "version": 1
+        },
+        "checks": {
+          "configured_replicas": 1,
+          "deployment_recorded": true,
+          "exact_image": true,
+          "http_health": {
+            "configured": true,
+            "ok": true,
+            "reason": "health_passed",
+            "status_code": 200
+          },
+          "newer_version": true,
+          "not_building": true,
+          "replica_evidence": "observed",
+          "running_replicas": 1,
+          "runtime_rollout_proven": true
+        },
+        "consumed_at": 1793905827.369229,
+        "created_at": 1793905691.446315,
+        "expires_at": 1793909291.446315,
+        "first_metadata_observed": {
+          "image": "nginx@sha256:5616878291a2eed594aee8db4dade5878cf7edcb475e59193904b198d9b830de",
+          "observed_at": 1793906032.4368582,
+          "version": 2
+        },
+        "guidance": {
+          "automatic": false,
+          "code": "inspect_dated_receipt",
+          "message": "The dated task and HTTP evidence passed. Keep the receipt; it does not prove migrations, ongoing availability or exclusive causation.",
+          "next_step": {
+            "arguments": {
+              "plan_id": "cc0f20d7a9b448cea059eba232faf6e9"
+            },
+            "requires_native_human_approval": false,
+            "tool": "caprover_status"
+          }
+        },
+        "image": "nginx@sha256:5616878291a2eed594aee8db4dade5878cf7edcb475e59193904b198d9b830de",
+        "observation": "available",
+        "observation_history": [
+          {
+            "checks": {
+              "configured_replicas": 1,
+              "deployment_recorded": true,
+              "exact_image": true,
+              "http_health": {
+                "configured": true,
+                "ok": true,
+                "reason": "health_passed",
+                "status_code": 200
+              },
+              "newer_version": true,
+              "not_building": true,
+              "replica_evidence": "observed",
+              "running_replicas": 1,
+              "runtime_rollout_proven": true
+            },
+            "image": "nginx@sha256:5616878291a2eed594aee8db4dade5878cf7edcb475e59193904b198d9b830de",
+            "observation": "available",
+            "observed_at": 1793906032.4368582,
+            "status": "verified",
+            "version": 2
+          }
+        ],
+        "observed": {
+          "app": "operator-demo",
+          "config_fingerprint": "7ef6e8de5a6f8435097991555b7d99fdc14fd7d860bbcf146b966d1951ed5868",
+          "image": "nginx@sha256:5616878291a2eed594aee8db4dade5878cf7edcb475e59193904b198d9b830de",
+          "is_building": false,
+          "replicas": 1,
+          "running_replicas": 1,
+          "runtime": {
+            "available": true,
+            "current_tasks": [
+              {
+                "desired_state": "running",
+                "image": "nginx@sha256:5616878291a2eed594aee8db4dade5878cf7edcb475e59193904b198d9b830de",
+                "slot": 1,
+                "state": "running"
+              }
+            ],
+            "desired_instances": 1,
+            "running_instances": 1
+          },
+          "version": 2
+        },
+        "observed_at": 1793906032.4368582,
+        "plan_hash": "871f537855117a22b954cea4750f0b00f02d4739cf75f1e7617c1a5a3265cdff",
+        "plan_id": "cc0f20d7a9b448cea059eba232faf6e9",
+        "requested": {
+          "image": "nginx@sha256:5616878291a2eed594aee8db4dade5878cf7edcb475e59193904b198d9b830de"
+        },
+        "status": "verified",
+        "target": "https://127.0.0.1:56373",
+        "trigger_outcome": "uncertain"
+      }
+    }
+  ],
+  "backend_acknowledgements": [
+    {
+      "http_status": 200,
+      "captain_status": 100
+    }
+  ],
+  "final_public_status": {
+    "guidance": {
+      "automatic": false,
+      "code": "inspect_saved_operations",
+      "message": "Choose the saved operation you want to inspect. Reconcile uncertain operations explicitly; suggestions never execute themselves.",
+      "next_step": {
+        "arguments": {},
+        "required_input": [
+          "plan_id"
+        ],
+        "requires_native_human_approval": false,
+        "tool": "caprover_status"
+      }
+    },
+    "limit": 20,
+    "operations": [
+      {
+        "app": "operator-demo",
+        "attempted_at": 1793905827.445597,
+        "baseline": {
+          "app": "operator-demo",
+          "config_fingerprint": "208112f9d18519531ad856fa218bca86b2464490764a52686214a6cdc74f174b",
+          "image": "nginx@sha256:a8b39bd9cf0f83869a2162827a0caf6137ddf759d50a171451b335cecc87d236",
+          "is_building": false,
+          "replicas": 1,
+          "running_replicas": 1,
+          "runtime": {
+            "available": true,
+            "current_tasks": [
+              {
+                "desired_state": "running",
+                "image": "nginx@sha256:a8b39bd9cf0f83869a2162827a0caf6137ddf759d50a171451b335cecc87d236",
+                "slot": 1,
+                "state": "running"
+              }
+            ],
+            "desired_instances": 1,
+            "running_instances": 1
+          },
+          "version": 1
+        },
+        "checks": {
+          "configured_replicas": 1,
+          "deployment_recorded": true,
+          "exact_image": true,
+          "http_health": {
+            "configured": true,
+            "ok": true,
+            "reason": "health_passed",
+            "status_code": 200
+          },
+          "newer_version": true,
+          "not_building": true,
+          "replica_evidence": "observed",
+          "running_replicas": 1,
+          "runtime_rollout_proven": true
+        },
+        "consumed_at": 1793905827.369229,
+        "created_at": 1793905691.446315,
+        "expires_at": 1793909291.446315,
+        "first_metadata_observed": {
+          "image": "nginx@sha256:5616878291a2eed594aee8db4dade5878cf7edcb475e59193904b198d9b830de",
+          "observed_at": 1793906032.4368582,
+          "version": 2
+        },
+        "guidance": {
+          "automatic": false,
+          "code": "inspect_dated_receipt",
+          "message": "The dated task and HTTP evidence passed. Keep the receipt; it does not prove migrations, ongoing availability or exclusive causation.",
+          "next_step": {
+            "arguments": {
+              "plan_id": "cc0f20d7a9b448cea059eba232faf6e9"
+            },
+            "requires_native_human_approval": false,
+            "tool": "caprover_status"
+          }
+        },
+        "image": "nginx@sha256:5616878291a2eed594aee8db4dade5878cf7edcb475e59193904b198d9b830de",
+        "observation": "available",
+        "observation_history": [
+          {
+            "checks": {
+              "configured_replicas": 1,
+              "deployment_recorded": true,
+              "exact_image": true,
+              "http_health": {
+                "configured": true,
+                "ok": true,
+                "reason": "health_passed",
+                "status_code": 200
+              },
+              "newer_version": true,
+              "not_building": true,
+              "replica_evidence": "observed",
+              "running_replicas": 1,
+              "runtime_rollout_proven": true
+            },
+            "image": "nginx@sha256:5616878291a2eed594aee8db4dade5878cf7edcb475e59193904b198d9b830de",
+            "observation": "available",
+            "observed_at": 1793906032.4368582,
+            "status": "verified",
+            "version": 2
+          }
+        ],
+        "observed": {
+          "app": "operator-demo",
+          "config_fingerprint": "7ef6e8de5a6f8435097991555b7d99fdc14fd7d860bbcf146b966d1951ed5868",
+          "image": "nginx@sha256:5616878291a2eed594aee8db4dade5878cf7edcb475e59193904b198d9b830de",
+          "is_building": false,
+          "replicas": 1,
+          "running_replicas": 1,
+          "runtime": {
+            "available": true,
+            "current_tasks": [
+              {
+                "desired_state": "running",
+                "image": "nginx@sha256:5616878291a2eed594aee8db4dade5878cf7edcb475e59193904b198d9b830de",
+                "slot": 1,
+                "state": "running"
+              }
+            ],
+            "desired_instances": 1,
+            "running_instances": 1
+          },
+          "version": 2
+        },
+        "observed_at": 1793906032.4368582,
+        "plan_hash": "871f537855117a22b954cea4750f0b00f02d4739cf75f1e7617c1a5a3265cdff",
+        "plan_id": "cc0f20d7a9b448cea059eba232faf6e9",
+        "requested": {
+          "image": "nginx@sha256:5616878291a2eed594aee8db4dade5878cf7edcb475e59193904b198d9b830de"
+        },
+        "status": "verified",
+        "target": "https://127.0.0.1:56373",
+        "trigger_outcome": "uncertain"
+      }
+    ],
+    "target": "https://127.0.0.1:56373"
+  }
+}
