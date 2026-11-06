@@ -1,6 +1,6 @@
 name: caprover-operator
 label: CapRover Operator
-version: "0.3.0"
+version: "0.3.1"
 description: State-bound deployment plans, native human approval and dated operation cards for one CapRover app, with durable uncertainty and separate runtime/health evidence.
 author: Felippe Mercurio
 license: MIT

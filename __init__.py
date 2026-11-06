@@ -418,6 +418,7 @@ class _Adapter:
                     f"deploy {plan.get('image', '')}. Baseline generation {baseline.get('version', 'unknown')}, "
                     f"requested replicas {baseline.get('replicas', 'unknown')}. "
                     "This permits one deployment attempt. A lost reply requires reconciliation. "
+                    "The image's startup behavior may run migrations or other side effects. "
                     "Image deployment does not restore environment variables, volumes or databases."
                 )
             with self._lock:
